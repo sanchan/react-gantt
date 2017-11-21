@@ -11,6 +11,29 @@ function clamp(n, min, max) {
 
 const ROW_HEIGHT = 30
 
+const INITIAL_STATE = {
+  dataItem: {
+    row: 0,
+    col: 0,
+  },
+  deltaItemX: 0,
+  deltaItemY: 0,
+  activeRowIdx: 0,
+  originPageX: 0,
+  originPageY: 0,
+  originItemPos: {
+    left: 0,
+    top: 0,
+  },
+  pageX: 0,
+  pageY: 0,
+  itemPos: {
+    left: 0,
+    top: 0,
+  },
+  isPressed: false,
+}
+
 class App extends Component {
 
   state = {
@@ -18,24 +41,7 @@ class App extends Component {
       [],
       [{ id: 123, name: 'Mr who', x: 100, y: 30}],
     ],
-    dataItem: {
-      row: 0,
-      col: 0,
-    },
-    activeRowIdx: 0,
-    originPageX: 0,
-    originPageY: 0,
-    originItemPos: {
-      left: 0,
-      top: 0,
-    },
-    pageX: 0,
-    pageY: 0,
-    itemPos: {
-      left: 0,
-      top: 0,
-    },
-    isPressed: false,
+    ...INITIAL_STATE
   };
 
   componentDidMount() {
@@ -58,6 +64,8 @@ class App extends Component {
         row: rowIdx,
         col: colIdx,
       },
+      deltaItemX: pageX - rect.left,
+      deltaItemY: pageY - rect.top,
       activeRowIdx: rowIdx,
       originPageX: pageX,
       originPageY: pageY,
@@ -84,29 +92,32 @@ class App extends Component {
   };
 
   handleMouseUp = ({ pageX, pageY }) => {
-    const { dataItem, activeRowIdx, originPageY } = this.state;
-
-    const data = [...this.state.data];
-    data[dataItem.row][dataItem.col].y = pageY - (pageY % ROW_HEIGHT)
-
-    // x: pageX - originPageX,
-    // y: activeRowIdx * ROW_HEIGHT
-
-    this.setState({
-      data,
-      isPressed: false
-    })
-  }
-
-  handleMouseEnterRow = (rowIdx, e) => {
-    const { isPressed } = this.state;
+    const { isPressed, dataItem, activeRowIdx, deltaItemX } = this.state;
 
     if (isPressed) {
+      const data = [...this.state.data];
+      data[dataItem.row][dataItem.col].x = pageX - deltaItemX
+      data[dataItem.row][dataItem.col].y = pageY - (pageY % ROW_HEIGHT)
+
+      // x: pageX - originPageX,
+      // y: activeRowIdx * ROW_HEIGHT
+
       this.setState({
-        activeRowIdx: rowIdx
-      });
+        data,
+        ...INITIAL_STATE
+      })
     }
-  };
+  }
+
+  // handleMouseEnterRow = (rowIdx, e) => {
+  //   const { isPressed } = this.state;
+
+  //   if (isPressed) {
+  //     this.setState({
+  //       activeRowIdx: rowIdx
+  //     });
+  //   }
+  // };
 
   render() {
     // const style = originalPosOfLastPressed === i && isPressed
@@ -120,7 +131,7 @@ class App extends Component {
     //     shadow: spring(1, springConfig),
     //     y: spring(order.indexOf(i) * 100, springConfig),
     //   };
-    const { data, x, y, pageX, pageY, originPageX, originPageY, activeRowIdx, isPressed } = this.state;
+    const { data, x, y, pageX, pageY, originPageX, originPageY, deltaItemY, activeRowIdx, isPressed } = this.state;
 
     return (
       <div className="App">
