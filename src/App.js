@@ -127,11 +127,13 @@ class App extends Component {
         {_.map(data, (row, rowIdx) => (
           <div className="gantt-row" key={rowIdx}>
             {_.map(row, (col, colIdx) => {
+              const unclampedPageY = pageY - originPageY;
+
               const style = {
                 scale: spring(1, springConfig),
                 shadow: spring(1, springConfig),
                 x: pageX - originPageX,
-                y: activeRowIdx * ROW_HEIGHT
+                y: unclampedPageY - (unclampedPageY % ROW_HEIGHT)
               }
 
               return (
@@ -144,8 +146,8 @@ class App extends Component {
                         boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
                         top: `${col.y}px`,
                         left: `${col.x}px`,
-                        transform: `translate3d(${x}px, 0, 0) scale(${scale})`,
-                        WebkitTransform: `translate3d(${x}px, 0, 0) scale(${scale})`,
+                        transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
+                        WebkitTransform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
                       }}>
                       X: {x} <br/>
                       Y: {y}
