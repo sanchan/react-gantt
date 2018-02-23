@@ -1,0 +1,23 @@
+.gantt-row {
+  height: 30px;
+  background: #aaa;
+}
+
+.gantt-row:nth-child(even) {
+  background: #ddd;
+}
+
+.gantt-task {
+  display: inline-block;
+  background: #fff;
+  border-radius: 3px;
+  height: 30px;
+  padding: 0 30px;
+  position: absolute;
+  cursor: move;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

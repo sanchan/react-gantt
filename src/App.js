@@ -136,7 +136,11 @@ class App extends Component {
     return (
       <div className="App">
         {_.map(data, (row, rowIdx) => (
-          <div className="gantt-row" key={rowIdx}>
+          <div
+            className="gantt-row"
+            key={rowIdx}
+            onMouseOver={this.handleRowHover}
+          >
             {_.map(row, (col, colIdx) => {
               const unclampedPageY = pageY - originPageY;
 
