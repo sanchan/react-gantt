@@ -1,4 +1,16 @@
 .row {
   height: 40px;
   border-bottom: 1px solid #aaa;
+  position: relative;
+  /* Far Land */
+  /* width: calc(500000vw * 100); */
+  width: 100000vw;
+}
+
+.is-over {
+  background: rgb(94, 150, 255);
+}
+
+.cant-drop {
+  background: rgb(49, 49, 49);
 }

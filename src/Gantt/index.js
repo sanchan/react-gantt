@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import Row from './Row';
 import DragItem from './DragItem';
+import { ItemTypes } from './constants';
 
-export default class Gantt extends Component {
+class Gantt extends Component {
   // NOTE Right now we are using the state (I'm too lazy to config redux :P), eventually we will move to redux
   static propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({
@@ -27,9 +30,10 @@ export default class Gantt extends Component {
       id: 4
     }],
     items: [{
-      rowId: 1,
-      pos: 0
-    }, {
+      id: 1,
+      rowId: 2,
+      pos: 50
+    },/* {
       rowId: 2,
       pos: 0
     }, {
@@ -38,19 +42,36 @@ export default class Gantt extends Component {
     }, {
       rowId: 4,
       pos: 0
-    }]
+    }*/]
   }
 
-  renderItem = (item) => (
-    <DragItem />
+  handleDrop = ({ item, target }) => {
+    if (!target) {
+      return;
+    }
+
+    const newItems = _.map(this.state.items, (i) => (
+      item.id === i.id ? { ...i, rowId: target.id} : i
+    ))
+
+    this.setState({
+      items: newItems
+    })
+
+
+
+  }
+
+  renderItem = (item, idx) => (
+    <DragItem key={idx} item={item} onDrop={this.handleDrop} />
   )
 
-  renderRow = (row) => {
+  renderRow = (row, idx) => {
     const { items } = this.state;
     const rowItems = _.filter(items, { rowId: row.id });
 
     return (
-      <Row>
+      <Row key={idx} row={row}>
         {_.map(rowItems, this.renderItem)}
       </Row>
     )
@@ -66,3 +87,5 @@ export default class Gantt extends Component {
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(Gantt)
