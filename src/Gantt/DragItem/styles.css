@@ -1,4 +1,5 @@
 .drag-item {
+  cursor: move;
   display: inline-block;
   background: #ccc;
   min-width: 80px;
@@ -6,3 +7,4 @@
   position: absolute;
   top: 0;
 }
+

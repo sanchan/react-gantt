@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import CustomDragLayer from './CustomDragLayer';
 import Row from './Row';
-import DragItem from './DragItem';
 import { ItemTypes } from './constants';
 
 class Gantt extends Component {
@@ -57,23 +57,14 @@ class Gantt extends Component {
     this.setState({
       items: newItems
     })
-
-
-
   }
-
-  renderItem = (item, idx) => (
-    <DragItem key={idx} item={item} onDrop={this.handleDrop} />
-  )
 
   renderRow = (row, idx) => {
     const { items } = this.state;
     const rowItems = _.filter(items, { rowId: row.id });
 
     return (
-      <Row key={idx} row={row}>
-        {_.map(rowItems, this.renderItem)}
-      </Row>
+      <Row key={idx} row={row} items={rowItems} onDrop={this.handleDrop} />
     )
   }
 
@@ -83,6 +74,7 @@ class Gantt extends Component {
     return (
       <div>
         {_.map(rows, this.renderRow)}
+        <CustomDragLayer snapToGrid={true} />
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cx from 'classnames';
 import { ItemTypes } from '../constants';
 import { DragSource } from 'react-dnd';
 import styles from './styles.css';
@@ -6,20 +7,23 @@ import styles from './styles.css';
 class DragItem extends Component {
   render() {
     const { connectDragSource, isDragging } = this.props;
+
     return connectDragSource(
-      <div
-        className="drag-item"
-        style={{
-          opacity: isDragging ? 0.5 : 1,
-          fontSize: 25,
-          fontWeight: 'bold',
-          cursor: 'move'
-        }}
-      >
+      <div className={cx('drag-item', isDragging && 'dragging')}>
         ♘
       </div>
     );
 
+  }
+}
+
+export class DragItemPreview extends Component {
+  render() {
+    return (
+      <div className={cx('drag-item')}>
+        ♘x
+      </div>
+    );
   }
 }
 

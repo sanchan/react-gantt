@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { DragLayer } from 'react-dnd'
-import ItemTypes from './ItemTypes'
-import BoxDragPreview from './BoxDragPreview'
-import snapToGrid from './snapToGrid'
+import { ItemTypes } from '../constants';
+import { DragItemPreview } from '../DragItem'
+import snapToGrid from '../snapToGrid'
 
 const layerStyles = {
   position: 'fixed',
@@ -13,6 +13,9 @@ const layerStyles = {
   top: 0,
   width: '100%',
   height: '100%',
+
+  backgroundColor: '#ccc',
+  borderBottom: '1px solid red',
 }
 
 class CustomDragLayer extends Component {
@@ -33,8 +36,8 @@ class CustomDragLayer extends Component {
 
   renderItem(type, item) {
     switch (type) {
-      case ItemTypes.BOX:
-        return <BoxDragPreview title={item.title} />
+      case ItemTypes.TASK:
+        return <DragItemPreview item={item} />
       default:
         return null
     }
@@ -75,10 +78,13 @@ function getItemStyles(props) {
     y += initialOffset.y
   }
 
+  console.log('here')
+
   const transform = `translate(${x}px, ${y}px)`
   return {
     transform,
     WebkitTransform: transform,
+    backgroundColor: 'red'
   }
 }
 
