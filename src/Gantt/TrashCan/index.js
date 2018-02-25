@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import cx from 'classnames';
+import DragItemPreview from '../DragItemPreview';
 import { ItemTypes } from '../constants';
 import { DropTarget } from 'react-dnd';
 
@@ -38,6 +39,7 @@ const spec = {
     const mousePosition = monitor.getClientOffset()
 
     const layerStyles = {
+      pointerEvents: 'none',
       backgroundColor: '#ccc',
       minWidth: '80px',
       height: '40px',
@@ -47,7 +49,8 @@ const spec = {
     }
 
     if (monitor.isOver({ shallow: true })) {
-      props.renderDraggedItem(<div style={layerStyles}>Delete ⚔️</div>)
+      // props.renderDraggedItem(<div style={layerStyles}>Delete ⚔️</div>)
+      props.renderDraggedItem(<DragItemPreview x={mousePosition.x} y={mousePosition.y}>😵</DragItemPreview>)
     }
   }
 };

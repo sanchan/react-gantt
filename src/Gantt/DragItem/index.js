@@ -25,7 +25,7 @@ class DragItem extends Component {
 
     return connectDragSource(
       <div className={cx('drag-item')}>
-        ♘ x {isDragging && 'wiiii'}
+        🙂
       </div>
     );
   }

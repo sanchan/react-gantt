@@ -6,11 +6,11 @@ import styles from './styles.css';
 
 export default class DragItemPreview extends Component {
   render() {
-    const { x, y } = this.props;
+    const { x, y, children } = this.props;
 
     return (
       <div className={cx('drag-item-preview')} style={{ top: y, left: x }}>
-        🤩
+        {children || "😮"}
       </div>
     );
   }
