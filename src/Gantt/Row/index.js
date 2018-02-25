@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import cx from 'classnames';
@@ -27,7 +28,9 @@ class Row extends Component {
   render() {
     const { items, connectDropTarget, isOver, canDrop, itemType, children } = this.props;
 
-    console.log('canDrop', this.props.canDrop)
+    // console.log('isOver', isOver)
+
+
 
     return connectDropTarget(
       <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')}>
@@ -47,6 +50,21 @@ const spec = {
     const { onDrop } = props
 
     return props.row
+  },
+
+  hover(props, monitor, component) {
+    const dragItem = <div id={11} />
+
+    const mousePosition = monitor.getClientOffset()
+    const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
+
+    // const componentRelativePosition =
+
+    // console.log('component', ReactDOM.findDOMNode(component).getBoundingClientRect())
+    console.log('component', mousePosition, componentClientReact)
+    if (!_.isEqual(props.dragItem, { x: 0, y: 0, component: dragItem })) {
+      props.draggingItemRenderer({ x: 0, y: 0, component: dragItem })
+    }
   }
 };
 

@@ -13,9 +13,6 @@ const layerStyles = {
   top: 0,
   width: '100%',
   height: '100%',
-
-  backgroundColor: '#ccc',
-  borderBottom: '1px solid red',
 }
 
 class CustomDragLayer extends Component {
@@ -78,7 +75,6 @@ function getItemStyles(props) {
     y += initialOffset.y
   }
 
-  console.log('here')
 
   const transform = `translate(${x}px, ${y}px)`
   return {

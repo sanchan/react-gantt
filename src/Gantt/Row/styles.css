@@ -4,7 +4,9 @@
   position: relative;
   /* Far Land */
   /* width: calc(500000vw * 100); */
-  width: 100000vw;
+  /* width: 100000vw; */
+  margin-left: 300px;
+  width: 3000px;
 }
 
 .is-over {
