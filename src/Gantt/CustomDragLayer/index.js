@@ -41,17 +41,23 @@ class CustomDragLayer extends Component {
   }
 
   render() {
-    const { item, itemType, isDragging } = this.props
+    const { item, itemType, isDragging, dragItem } = this.props
 
     if (!isDragging) {
       return null
     }
 
+    console.log('draginng')
+
     return (
       <div style={layerStyles}>
+      {this.renderItem(itemType, item)}
+        {/*
+        dragItem ||
         <div style={getItemStyles(this.props)}>
           {this.renderItem(itemType, item)}
         </div>
+        */}
       </div>
     )
   }

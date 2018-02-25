@@ -5,7 +5,8 @@ import _ from 'lodash';
 import cx from 'classnames';
 import { ItemTypes } from '../constants';
 import { DropTarget } from 'react-dnd';
-import DragItem from '../DragItem';
+import DragItem, { DragItemPreview } from '../DragItem';
+import snapToGrid from '../snapToGrid'
 import styles from './styles.css';
 
 class Row extends Component {
@@ -21,22 +22,12 @@ class Row extends Component {
     itemType: PropTypes.string.isRequired,
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (!nextProps.isOver) {
-  //     nextProps.renderDraggedItem(null)
-  //   }
-  // }
-
   renderItem = (item, idx) => (
     <DragItem key={idx} item={item} onDrop={this.props.onDrop} />
   )
 
   render() {
     const { items, connectDropTarget, isOver, canDrop, itemType, children } = this.props;
-
-    // console.log('isOver', isOver)
-
-
 
     return connectDropTarget(
       <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')}>
@@ -59,17 +50,13 @@ const spec = {
   },
 
   hover(props, monitor, component) {
-    const dragItem = <div id={11} />
-
     const mousePosition = monitor.getClientOffset()
     const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
 
-    // const componentRelativePosition =
+    const [ x ] = snapToGrid(mousePosition.x, 0)
+    const { y } = componentClientReact
 
-    // console.log('component', ReactDOM.findDOMNode(component).getBoundingClientRect())
-    // console.log('component', mousePosition, componentClientReact)
-
-    props.renderDraggedItem(dragItem)
+    props.renderDraggedItem(<DragItemPreview x={x} y={componentClientReact.y} />)
   }
 };
 

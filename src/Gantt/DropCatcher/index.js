@@ -31,11 +31,10 @@ const spec = {
   },
 
   hover(props, monitor, component) {
+    // If user is dragging item ONLY over DropCatcher and not over a nested component,
+    // then remove the dragged item, so we return delegation of rendering to DragLayer.
     if (monitor.isOver({ shallow: true })) {
-      // console.log('wololooooo')
       props.renderDraggedItem(null)
-    } else {
-      // console.log('------')
     }
   }
 };

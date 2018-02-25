@@ -8,3 +8,8 @@
   top: 0;
 }
 
+.drag-item.dragging {
+  background: red;
+  display: none;
+}
+

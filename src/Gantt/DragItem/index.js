@@ -8,9 +8,11 @@ class DragItem extends Component {
   render() {
     const { connectDragSource, isDragging } = this.props;
 
+    console.log('hide me')
+
     return connectDragSource(
       <div className={cx('drag-item', isDragging && 'dragging')}>
-        ♘
+        ♘ x {isDragging && 'wiiii'}
       </div>
     );
 
@@ -19,9 +21,11 @@ class DragItem extends Component {
 
 export class DragItemPreview extends Component {
   render() {
+    const { x, y } = this.props;
+
     return (
-      <div className={cx('drag-item')}>
-        ♘x
+      <div className={cx('drag-item')} style={{ position: 'absolute', top: y, left: x }}>
+        ♘
       </div>
     );
   }
@@ -34,11 +38,11 @@ const spec = {
 
   endDrag(props, monitor) {
     const { onDrop } = props
-		const item = monitor.getItem()
+    const item = monitor.getItem()
     const target = monitor.getDropResult()
 
     onDrop({ item, target })
-	}
+  }
 };
 
 function collect(connect, monitor) {

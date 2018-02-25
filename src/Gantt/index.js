@@ -29,46 +29,6 @@ class Gantt extends Component {
       id: 3
     }, {
       id: 4
-    },{
-      id: 1
-    }, {
-      id: 2
-    }, {
-      id: 3
-    }, {
-      id: 4
-    },{
-      id: 1
-    }, {
-      id: 2
-    }, {
-      id: 3
-    }, {
-      id: 4
-    },{
-      id: 1
-    }, {
-      id: 2
-    }, {
-      id: 3
-    }, {
-      id: 4
-    },{
-      id: 1
-    }, {
-      id: 2
-    }, {
-      id: 3
-    }, {
-      id: 4
-    },{
-      id: 1
-    }, {
-      id: 2
-    }, {
-      id: 3
-    }, {
-      id: 4
     }],
     items: [{
       id: 1,
@@ -100,112 +60,37 @@ class Gantt extends Component {
     })
   }
 
-  //BEGIN Drag Delegate
-  // constructor(props) {
-  //   super(props)
-
-  //   this.throttledMouseMove = _.throttle(this.throttledMouseMove, 60)
-  // }
-
-  // throttledMouseMove = (e) => {
-  //   this.setState({
-  //     mouseX: e.screenX,
-  //     mouseY: e.screenY,
-  //   })
-  // }
-
-  // handleMouseMove = (e) => {
-  //   e.persist();
-  //   console.log('move')
-  //   this.throttledMouseMove(e);
-  // }
-
-
-  //END Drag Delegate
-
-
   renderRow = (row, idx) => {
-    const { items, mouseX, mouseY } = this.state;
+    const { items } = this.state;
     const rowItems = _.filter(items, { rowId: row.id });
 
     return (
-      this.draggingItemRenderedDelegated(
-        <Row key={idx} row={row} items={rowItems} onDrop={this.handleDrop} mouseX={mouseX} mouseY={mouseY} />
-      )
+      <Row key={idx} row={row} items={rowItems} onDrop={this.handleDrop} renderDraggedItem={this.handleRenderDraggedItem} />
     )
   }
 
-  render() {
-    const { rows } = this.state;
+  handleRenderDraggedItem = (dragItemComponent) => {
+    if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
+      this.setState({
+        dragItem: dragItemComponent
+      });
+    }
+  }
 
-    console.log('dragItem', this.state.dragItem)
+  render() {
+    const { rows, dragItem } = this.state;
+
+    // console.log('dragItem', dragItem)
 
     return (
       <div>
-        {this.draggingItemRenderedDelegated(
-          <DropCatcher>
-            {_.map(rows, this.renderRow)}
-            {this.delegateDraggingItemRendering(
-              <CustomDragLayer snapToGrid={false} />
-            )}
-
-          </DropCatcher>
-        )}
-
-
-        {/*
-        */}
-
+        <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
+          {_.map(rows, this.renderRow)}
+          <CustomDragLayer snapToGrid={false} dragItem={dragItem} />
+        </DropCatcher>
       </div>
     );
   }
 }
 
-function DragItemDelegate(component) {
-  // TODO Improve this. This is not a propper decoration... And we want to pass the funcions as props
-  return class DragItemDelegateClass extends component {
-    handleRenderDraggedItem = (dragItemComponent) => {
-      if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
-        this.setState({
-          dragItem: dragItemComponent
-        });
-      }
-    }
-
-    // draggingItemRenderingWrapper = (component) => {
-    //   return (
-    //     React.cloneElement(
-    //       component,
-    //       {
-    //         ,
-    //         // dragItem: this.state.dragItem,
-    //       }
-    //     )
-    //   )
-    // }
-
-    draggingItemRenderedDelegated = (component) => {
-      return (
-        React.cloneElement(
-          component,
-          {
-            renderDraggedItem: this.handleRenderDraggedItem,
-          }
-        )
-      )
-    }
-
-    delegateDraggingItemRendering = (component) => {
-      return (
-        React.cloneElement(
-          component,
-          {
-            draggingItem: this.state.dragItem
-          }
-        )
-      )
-    }
-  }
-}
-
-export default DragDropContext(HTML5Backend)(DragItemDelegate(Gantt))
+export default DragDropContext(HTML5Backend)(Gantt)
