@@ -8,26 +8,16 @@ class DragItem extends Component {
   render() {
     const { connectDragSource, isDragging } = this.props;
 
-    console.log('hide me')
+    if (isDragging) {
+      return null;
+    }
 
     return connectDragSource(
-      <div className={cx('drag-item', isDragging && 'dragging')}>
+      <div className={cx('drag-item')}>
         ♘ x {isDragging && 'wiiii'}
       </div>
     );
 
-  }
-}
-
-export class DragItemPreview extends Component {
-  render() {
-    const { x, y } = this.props;
-
-    return (
-      <div className={cx('drag-item')} style={{ position: 'absolute', top: y, left: x }}>
-        ♘
-      </div>
-    );
   }
 }
 
@@ -52,4 +42,4 @@ function collect(connect, monitor) {
   }
 }
 
-export default DragSource(ItemTypes.TASK, spec, collect)(DragItem)
+export default DragSource(ItemTypes.TASK, spec, collect)(DragItem);

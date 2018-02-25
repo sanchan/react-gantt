@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { DragLayer } from 'react-dnd'
-import { ItemTypes } from '../constants';
-import { DragItemPreview } from '../DragItem'
-import snapToGrid from '../snapToGrid'
+import { ItemTypes } from './constants';
+import DragItemPreview from './DragItemPreview'
+import snapToGrid from './snapToGrid'
 
 const layerStyles = {
   position: 'fixed',
@@ -14,6 +14,27 @@ const layerStyles = {
   width: '100%',
   height: '100%',
 }
+
+function getItemStyles(props) {
+  const { initialOffset, currentOffset } = props
+  if (!initialOffset || !currentOffset) {
+    return {
+      display: 'none',
+    }
+  }
+
+  // console.log('snapToGrid')
+
+  const { x, y } = currentOffset
+
+  const transform = `translate(${x}px, ${y}px)`
+  return {
+    transform,
+    WebkitTransform: transform,
+    backgroundColor: 'green'
+  }
+}
+
 
 class CustomDragLayer extends Component {
   static propTypes = {
@@ -34,63 +55,30 @@ class CustomDragLayer extends Component {
   renderItem(type, item) {
     switch (type) {
       case ItemTypes.TASK:
-        return <DragItemPreview item={item} />
+        return <DragItemPreview />
       default:
         return null
     }
   }
 
   render() {
-    const { item, itemType, isDragging, dragItem } = this.props
+    const { item, itemType, isDragging } = this.props
 
-    if (!isDragging) {
-      return null
-    }
-
-    console.log('draginng')
+    // if (!isDragging) {
+    //   return null
+    // }
 
     return (
       <div style={layerStyles}>
-      {this.renderItem(itemType, item)}
-        {/*
-        dragItem ||
         <div style={getItemStyles(this.props)}>
           {this.renderItem(itemType, item)}
         </div>
-        */}
       </div>
     )
   }
 }
 
-function getItemStyles(props) {
-  const { initialOffset, currentOffset } = props
-  if (!initialOffset || !currentOffset) {
-    return {
-      display: 'none',
-    }
-  }
-
-  let { x, y } = currentOffset
-
-  if (props.snapToGrid) {
-    x -= initialOffset.x
-    y -= initialOffset.y
-    ;[x, y] = snapToGrid(x, y)
-    x += initialOffset.x
-    y += initialOffset.y
-  }
-
-
-  const transform = `translate(${x}px, ${y}px)`
-  return {
-    transform,
-    WebkitTransform: transform,
-    backgroundColor: 'red'
-  }
-}
-
-export default  DragLayer(monitor => ({
+export default DragLayer(monitor => ({
   item: monitor.getItem(),
   itemType: monitor.getItemType(),
   initialOffset: monitor.getInitialSourceClientOffset(),

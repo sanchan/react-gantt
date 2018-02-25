@@ -34,16 +34,7 @@ class Gantt extends Component {
       id: 1,
       rowId: 1,
       pos: 50
-    },/* {
-      rowId: 2,
-      pos: 0
-    }, {
-      rowId: 3,
-      pos: 0
-    }, {
-      rowId: 4,
-      pos: 0
-    }*/]
+    }]
   }
 
   handleDrop = ({ item, target }) => {
@@ -60,6 +51,14 @@ class Gantt extends Component {
     })
   }
 
+  handleRenderDraggedItem = (dragItemComponent) => {
+    if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
+      this.setState({
+        dragItem: dragItemComponent
+      });
+    }
+  }
+
   renderRow = (row, idx) => {
     const { items } = this.state;
     const rowItems = _.filter(items, { rowId: row.id });
@@ -69,14 +68,6 @@ class Gantt extends Component {
     )
   }
 
-  handleRenderDraggedItem = (dragItemComponent) => {
-    if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
-      this.setState({
-        dragItem: dragItemComponent
-      });
-    }
-  }
-
   render() {
     const { rows, dragItem } = this.state;
 
@@ -84,10 +75,13 @@ class Gantt extends Component {
 
     return (
       <div>
-        <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
-          {_.map(rows, this.renderRow)}
-          <CustomDragLayer snapToGrid={false} dragItem={dragItem} />
-        </DropCatcher>
+      <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
+        {_.map(rows, this.renderRow)}
+      </DropCatcher>
+        <CustomDragLayer snapToGrid={false} />
+
+
+
       </div>
     );
   }

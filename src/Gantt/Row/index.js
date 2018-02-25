@@ -5,7 +5,8 @@ import _ from 'lodash';
 import cx from 'classnames';
 import { ItemTypes } from '../constants';
 import { DropTarget } from 'react-dnd';
-import DragItem, { DragItemPreview } from '../DragItem';
+import DragItem from '../DragItem';
+import DragItemPreview from '../DragItemPreview';
 import snapToGrid from '../snapToGrid'
 import styles from './styles.css';
 
@@ -56,7 +57,7 @@ const spec = {
     const [ x ] = snapToGrid(mousePosition.x, 0)
     const { y } = componentClientReact
 
-    props.renderDraggedItem(<DragItemPreview x={x} y={componentClientReact.y} />)
+    // props.renderDraggedItem(<DragItemPreview x={x} y={componentClientReact.y} />)
   }
 };
 
