@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { DragLayer } from 'react-dnd'
-import { ItemTypes } from './constants';
-import DragItemPreview from './DragItemPreview'
-import snapToGrid from './snapToGrid'
+import { ItemTypes } from '../constants';
+import DragItemPreview from '../DragItemPreview'
+import snapToGrid from '../snapToGrid'
 
 const layerStyles = {
   position: 'fixed',
@@ -13,28 +13,9 @@ const layerStyles = {
   top: 0,
   width: '100%',
   height: '100%',
+
+  backgroundColor: 'gre',
 }
-
-function getItemStyles(props) {
-  const { initialOffset, currentOffset } = props
-  if (!initialOffset || !currentOffset) {
-    return {
-      display: 'none',
-    }
-  }
-
-  // console.log('snapToGrid')
-
-  const { x, y } = currentOffset
-
-  const transform = `translate(${x}px, ${y}px)`
-  return {
-    transform,
-    WebkitTransform: transform,
-    backgroundColor: 'green'
-  }
-}
-
 
 class CustomDragLayer extends Component {
   static propTypes = {
@@ -53,28 +34,57 @@ class CustomDragLayer extends Component {
   }
 
   renderItem(type, item) {
+    console.log('ItemTypes.TASK', ItemTypes.TASK)
     switch (type) {
       case ItemTypes.TASK:
-        return <DragItemPreview />
+        return <DragItemPreview item={item} />
       default:
         return null
     }
   }
 
   render() {
-    const { item, itemType, isDragging } = this.props
+    const { item, itemType, isDragging, dragItem } = this.props
 
-    // if (!isDragging) {
-    //   return null
-    // }
+    if (!isDragging) {
+      return null
+    }
 
     return (
+      // dragItem ||
       <div style={layerStyles}>
         <div style={getItemStyles(this.props)}>
           {this.renderItem(itemType, item)}
         </div>
       </div>
     )
+  }
+}
+
+function getItemStyles(props) {
+  const { initialOffset, currentOffset } = props
+  if (!initialOffset || !currentOffset) {
+    return {
+      display: 'none',
+    }
+  }
+
+  let { x, y } = currentOffset
+
+  if (props.snapToGrid) {
+    x -= initialOffset.x
+    y -= initialOffset.y
+    ;[x, y] = snapToGrid(x, y)
+    x += initialOffset.x
+    y += initialOffset.y
+  }
+
+
+  const transform = `translate(${x}px, ${y}px)`
+  return {
+    transform,
+    WebkitTransform: transform,
+    backgroundColor: 'red'
   }
 }
 

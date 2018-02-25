@@ -52,11 +52,11 @@ class Gantt extends Component {
   }
 
   handleRenderDraggedItem = (dragItemComponent) => {
-    if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
-      this.setState({
-        dragItem: dragItemComponent
-      });
-    }
+    // if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
+    //   this.setState({
+    //     dragItem: dragItemComponent
+    //   });
+    // }
   }
 
   renderRow = (row, idx) => {
@@ -78,7 +78,7 @@ class Gantt extends Component {
       <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
         {_.map(rows, this.renderRow)}
       </DropCatcher>
-        <CustomDragLayer snapToGrid={false} />
+      <CustomDragLayer snapToGrid={false} />
 
 
 

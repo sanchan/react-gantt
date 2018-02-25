@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
+    "immutability-helper": "^2.6.5",
     "lodash": "^4.17.4",
     "react": "^16.1.1",
     "react-dnd": "^2.5.4",
