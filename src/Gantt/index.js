@@ -5,6 +5,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import CustomDragLayer from './CustomDragLayer';
 import DropCatcher from './DropCatcher';
+import TrashCan from './TrashCan';
 import Row from './Row';
 import { ItemTypes } from './constants';
 
@@ -77,7 +78,10 @@ class Gantt extends Component {
       <div>
       <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
         {_.map(rows, this.renderRow)}
+        <TrashCan renderDraggedItem={this.handleRenderDraggedItem} />
       </DropCatcher>
+
+
       <CustomDragLayer dragItem={dragItem} />
 
 
