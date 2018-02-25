@@ -21,6 +21,12 @@ class Row extends Component {
     itemType: PropTypes.string.isRequired,
   };
 
+  // componentWillReceiveProps(nextProps) {
+  //   if (!nextProps.isOver) {
+  //     nextProps.renderDraggedItem(null)
+  //   }
+  // }
+
   renderItem = (item, idx) => (
     <DragItem key={idx} item={item} onDrop={this.props.onDrop} />
   )
@@ -61,10 +67,9 @@ const spec = {
     // const componentRelativePosition =
 
     // console.log('component', ReactDOM.findDOMNode(component).getBoundingClientRect())
-    console.log('component', mousePosition, componentClientReact)
-    if (!_.isEqual(props.dragItem, { x: 0, y: 0, component: dragItem })) {
-      props.draggingItemRenderer({ x: 0, y: 0, component: dragItem })
-    }
+    // console.log('component', mousePosition, componentClientReact)
+
+    props.renderDraggedItem(dragItem)
   }
 };
 

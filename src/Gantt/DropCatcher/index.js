@@ -32,9 +32,10 @@ const spec = {
 
   hover(props, monitor, component) {
     if (monitor.isOver({ shallow: true })) {
-      console.log('wololooooo')
+      // console.log('wololooooo')
+      props.renderDraggedItem(null)
     } else {
-      console.log('------')
+      // console.log('------')
     }
   }
 };
