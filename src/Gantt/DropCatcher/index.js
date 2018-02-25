@@ -6,7 +6,13 @@ import { ItemTypes } from '../constants';
 import { DropTarget } from 'react-dnd';
 
 const layerStyles = {
-  backgroundColor: 'red'
+  backgroundColor: '#fafafa',
+  cursor: 'move',
+  position: 'fixed',
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%',
 }
 
 class DropCatcher extends Component {

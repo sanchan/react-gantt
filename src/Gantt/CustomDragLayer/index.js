@@ -51,7 +51,7 @@ class CustomDragLayer extends Component {
     }
 
     return (
-      // dragItem ||
+      dragItem ||
       <div style={layerStyles}>
         <div style={getItemStyles(this.props)}>
           {this.renderItem(itemType, item)}
@@ -70,15 +70,6 @@ function getItemStyles(props) {
   }
 
   let { x, y } = currentOffset
-
-  if (props.snapToGrid) {
-    x -= initialOffset.x
-    y -= initialOffset.y
-    ;[x, y] = snapToGrid(x, y)
-    x += initialOffset.x
-    y += initialOffset.y
-  }
-
 
   const transform = `translate(${x}px, ${y}px)`
   return {

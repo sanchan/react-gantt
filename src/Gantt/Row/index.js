@@ -57,7 +57,7 @@ const spec = {
     const [ x ] = snapToGrid(mousePosition.x, 0)
     const { y } = componentClientReact
 
-    // props.renderDraggedItem(<DragItemPreview x={x} y={componentClientReact.y} />)
+    props.renderDraggedItem(<DragItemPreview x={x} y={componentClientReact.y} />)
   }
 };
 

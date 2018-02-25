@@ -28,7 +28,6 @@ class DragItem extends Component {
         ♘ x {isDragging && 'wiiii'}
       </div>
     );
-
   }
 }
 
