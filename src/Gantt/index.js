@@ -190,20 +190,19 @@ function DragItemDelegate(component) {
           component,
           {
             renderDraggedItem: this.handleRenderDraggedItem,
-            // stopDelegation: this.setState.bind(this, {
-            //   dragItem: null
-            // })
           }
         )
       )
     }
 
     delegateDraggingItemRendering = (component) => {
-      React.cloneElement(
-        component,
-        {
-          draggingItem: this.state.dragItem
-        }
+      return (
+        React.cloneElement(
+          component,
+          {
+            draggingItem: this.state.dragItem
+          }
+        )
       )
     }
   }
