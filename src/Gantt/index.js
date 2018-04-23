@@ -9,6 +9,11 @@ import TrashCan from './TrashCan';
 import Row from './Row';
 import { ItemTypes } from './constants';
 
+
+/**
+ * TODO
+ * - Create decorator for components that receive 'renderDraggedItem'
+ */
 class Gantt extends Component {
   // NOTE Right now we are using the state (I'm too lazy to config redux :P), eventually we will move to redux
   static propTypes = {
@@ -16,25 +21,20 @@ class Gantt extends Component {
       id: PropTypes.number.isRequired,
     })).isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
       rowId: PropTypes.number.isRequired,
-      pos: PropTypes.number.isRequired,
+      x: PropTypes.number.isRequired,
     })).isRequired
   };
 
   state = {
-    rows: [{
-      id: 1
-    }, {
-      id: 2
-    }, {
-      id: 3
-    }, {
-      id: 4
-    }],
+    rows: _.times(50, t => ({
+      id: t + 1
+    })),
     items: [{
       id: 1,
       rowId: 1,
-      pos: 50
+      x: 50
     }]
   }
 
@@ -72,20 +72,14 @@ class Gantt extends Component {
   render() {
     const { rows, dragItem } = this.state;
 
-    // console.log('dragItem', dragItem)
-
     return (
       <div>
-      <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
-        {_.map(rows, this.renderRow)}
-        <TrashCan renderDraggedItem={this.handleRenderDraggedItem} />
-      </DropCatcher>
+        <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
+          {_.map(rows, this.renderRow)}
+          <TrashCan renderDraggedItem={this.handleRenderDraggedItem} />
+        </DropCatcher>
 
-
-      <CustomDragLayer dragItem={dragItem} />
-
-
-
+        <CustomDragLayer dragItem={dragItem} />
       </div>
     );
   }

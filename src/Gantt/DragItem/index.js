@@ -32,13 +32,25 @@ class DragItem extends Component {
 }
 
 const spec = {
-  beginDrag(props) {
-    return props.item;
+  /**
+   * If we need to disable drag on the DragItem, we can check the props and return false;
+   */
+  canDrag(props, monitor) {
+    return true;
+  },
+
+  /**
+   * The returned data will be accessible through monitor.getItem()
+   */
+  beginDrag(props, monitor, component) {
+    return props.item
   },
 
   endDrag(props, monitor) {
     const { onDrop } = props
+    // The data returned by beginDrag()
     const item = monitor.getItem()
+    // The data returned by DropTarget.spec.drop()
     const target = monitor.getDropResult()
 
     onDrop({ item, target })

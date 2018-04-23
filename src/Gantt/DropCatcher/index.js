@@ -13,6 +13,7 @@ const layerStyles = {
   top: 0,
   width: '100%',
   height: '100%',
+  overflow: 'auto'
 }
 
 class DropCatcher extends Component {

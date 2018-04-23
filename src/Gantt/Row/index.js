@@ -51,10 +51,24 @@ const spec = {
   },
 
   hover(props, monitor, component) {
-    const mousePosition = monitor.getClientOffset()
+    // The exact mouse coordinates relative to the 'viewport' when the drag starts
+    const initialClientOffset = monitor.getInitialClientOffset()
+
+    // The coordinates (0,0) relative to the 'viewport' of the drag source when the drag starts
+    const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
+
+    // The exact mouse coordinates relative to the 'viewport'
+    const clientOffset = monitor.getClientOffset()
+
+    // The inner coordinates of the drag event
+    const sourceOriginOffset = {
+      x: initialClientOffset.x - initialSourceClientOffset.x,
+      y: initialClientOffset.y - initialSourceClientOffset.y
+    }
+
     const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
 
-    const [ x ] = snapToGrid(mousePosition.x, 0)
+    const [ x ] = snapToGrid(clientOffset.x - sourceOriginOffset.x, 0)
     const { y } = componentClientReact
 
     props.renderDraggedItem(<DragItemPreview x={x} y={componentClientReact.y}>🤩</DragItemPreview>)
