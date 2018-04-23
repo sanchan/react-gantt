@@ -32,7 +32,8 @@ class Row extends Component {
    */
   stylesForItem = (item) => {
     return {
-      left: item.data.start
+      left: item.data.start,
+      width: item.data.end - item.data.start
     }
   }
 
