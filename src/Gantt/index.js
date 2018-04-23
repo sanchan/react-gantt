@@ -23,7 +23,10 @@ class Gantt extends Component {
     items: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       rowId: PropTypes.number.isRequired,
-      x: PropTypes.number.isRequired,
+      data: PropTypes.shape({
+        start: PropTypes.number.isRequired,
+        end: PropTypes.number.isRequired,
+      })
     })).isRequired
   };
 
@@ -34,7 +37,10 @@ class Gantt extends Component {
     items: [{
       id: 1,
       rowId: 1,
-      x: 50
+      data: {
+        start: 32,
+        end: 96
+      }
     }]
   }
 

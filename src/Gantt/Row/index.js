@@ -23,8 +23,21 @@ class Row extends Component {
     itemType: PropTypes.string.isRequired,
   };
 
+  /**
+   * We must make transformation using:
+   * - item.data.start: The item's start value/timestamp;
+   * - item.data.end: The item's end value/timestamp;
+   * - Row.start: The row's start value/timestamp.
+   * - Row.end: The row's end value/timestamp.
+   */
+  stylesForItem = (item) => {
+    return {
+      left: item.data.start
+    }
+  }
+
   renderItem = (item, idx) => (
-    <DragItem key={idx} item={item} onDrop={this.props.onDrop} />
+    <DragItem key={idx} item={item} onDrop={this.props.onDrop} style={this.stylesForItem(item)} />
   )
 
   render() {

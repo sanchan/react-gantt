@@ -17,14 +17,14 @@ class DragItem extends Component {
   }
 
   render() {
-    const { connectDragSource, isDragging } = this.props;
+    const { connectDragSource, isDragging, style } = this.props;
 
     if (isDragging) {
       return null;
     }
 
     return connectDragSource(
-      <div className={cx('drag-item')}>
+      <div className={cx('drag-item')} style={style}>
         🙂
       </div>
     );
