@@ -52,13 +52,30 @@ class Row extends Component {
   }
 }
 
+const snapToRow = (sourceOffset, componentClientReact, row) => {
+  // const snappedX = Math.round(sourceOffset.x / 32) * 32
+  const snappedX = Math.round(sourceOffset.x / row.data.step) * row.data.step
+
+  console.log(componentClientReact)
+
+  return {
+    x: snappedX,
+    y: componentClientReact.y
+  }
+}
+
+let prevX, prevY
 const spec = {
   canDrop(props) {
     // Check permissions
     return true;
   },
 
-  drop(props) {
+  /**
+   * This returns the object will be passed to DragSource.spec.endDrag through
+   * monitor.getDropResult()
+   */
+  drop(props, monitor, component) {
     const { onDrop } = props
 
     return props.row
@@ -80,12 +97,23 @@ const spec = {
       y: initialClientOffset.y - initialSourceClientOffset.y
     }
 
+    // const rowOffset = {
+    //   x: initialClientOffset.x - initialSourceClientOffset.x,
+    //   y: initialClientOffset.y - initialSourceClientOffset.y
+    // }
+
     const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
 
-    const [ x ] = snapToGrid(clientOffset.x - sourceOriginOffset.x, 0)
-    const { y } = componentClientReact
+    const { x, y } = snapToRow(clientOffset, componentClientReact, props.row)
 
-    props.renderDraggedItem(<DragItemPreview x={x} y={componentClientReact.y}>🤩</DragItemPreview>)
+    if (x === prevX && y === prevY) {
+      return;
+    }
+
+    prevX = x
+    prevY = y
+
+    props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>)
   }
 };
 

@@ -19,6 +19,10 @@ class Gantt extends Component {
   static propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
+      data: PropTypes.shape({
+        start: PropTypes.number.isRequired,
+        end: PropTypes.number.isRequired,
+      })
     })).isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -31,8 +35,13 @@ class Gantt extends Component {
   };
 
   state = {
-    rows: _.times(50, t => ({
-      id: t + 1
+    rows: _.times(100, t => ({
+      id: t + 1,
+      data: {
+        start: 0,
+        end: 3000,
+        step: 32, // The sticky gap value
+      }
     })),
     items: [{
       id: 1,
