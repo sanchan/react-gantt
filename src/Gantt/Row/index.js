@@ -86,25 +86,33 @@ const spec = {
   },
 
   hover(props, monitor, component) {
-    // // The exact mouse coordinates relative to the 'viewport' when the drag starts
-    // const initialClientOffset = monitor.getInitialClientOffset()
+    // The exact mouse coordinates relative to the 'viewport' when the drag starts
+    const initialClientOffset = monitor.getInitialClientOffset()
 
-    // // The coordinates (0,0) relative to the 'viewport' of the drag source when the drag starts
-    // const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
+    // The initial coordinates (0,0) relatives to the 'viewport' of the DragSource
+    const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
 
-    // // The inner coordinates of the drag event
-    // const sourceOriginOffset = {
-    //   x: initialClientOffset.x - initialSourceClientOffset.x,
-    //   y: initialClientOffset.y - initialSourceClientOffset.y
-    // }
+    // The inner coordinates (x,y) relatives to the (0,0) of the DragSource
+    const sourceOriginOffset = {
+      x: initialClientOffset.x - initialSourceClientOffset.x,
+      y: initialClientOffset.y - initialSourceClientOffset.y
+    }
 
-    // The exact mouse coordinates relative to the 'viewport'
+    // The mouse coordinates (x,y) relatives to the 'viewport'
     const clientOffset = monitor.getClientOffset()
+
+    // We need to offset negatively the clientOffset substracting the sourceOriginOffset
+    // so the top-left corner of the DragSource is snapped correctly
+    const sourceOffset = {
+      x: clientOffset.x - sourceOriginOffset.x,
+      y: clientOffset.y - sourceOriginOffset.y
+    }
 
     const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
 
-    const { x, y } = snapToRow(clientOffset, componentClientReact, props.row)
+    const { x, y } = snapToRow(sourceOffset, componentClientReact, props.row)
 
+    // We do this check to avoid unnecessary renders of <DragItemPreview>
     if (x === prevX && y === prevY) {
       return;
     }
