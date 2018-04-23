@@ -53,13 +53,17 @@ class Row extends Component {
 }
 
 const snapToRow = (sourceOffset, componentClientReact, row) => {
-  // const snappedX = Math.round(sourceOffset.x / 32) * 32
   const snappedX = Math.round(sourceOffset.x / row.data.step) * row.data.step
 
-  console.log(componentClientReact)
+  // This is were the potential new position of the item,
+  // we need next to 'snap' this value to the closest step
+  const currentValue = {
+    x: sourceOffset.x - componentClientReact.x,
+    y: sourceOffset.y - componentClientReact.y,
+  }
 
   return {
-    x: snappedX,
+    x: (Math.round(currentValue.x / row.data.step) * row.data.step) + componentClientReact.x,
     y: componentClientReact.y
   }
 }
@@ -82,25 +86,20 @@ const spec = {
   },
 
   hover(props, monitor, component) {
-    // The exact mouse coordinates relative to the 'viewport' when the drag starts
-    const initialClientOffset = monitor.getInitialClientOffset()
+    // // The exact mouse coordinates relative to the 'viewport' when the drag starts
+    // const initialClientOffset = monitor.getInitialClientOffset()
 
-    // The coordinates (0,0) relative to the 'viewport' of the drag source when the drag starts
-    const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
+    // // The coordinates (0,0) relative to the 'viewport' of the drag source when the drag starts
+    // const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
 
-    // The exact mouse coordinates relative to the 'viewport'
-    const clientOffset = monitor.getClientOffset()
-
-    // The inner coordinates of the drag event
-    const sourceOriginOffset = {
-      x: initialClientOffset.x - initialSourceClientOffset.x,
-      y: initialClientOffset.y - initialSourceClientOffset.y
-    }
-
-    // const rowOffset = {
+    // // The inner coordinates of the drag event
+    // const sourceOriginOffset = {
     //   x: initialClientOffset.x - initialSourceClientOffset.x,
     //   y: initialClientOffset.y - initialSourceClientOffset.y
     // }
+
+    // The exact mouse coordinates relative to the 'viewport'
+    const clientOffset = monitor.getClientOffset()
 
     const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
 
