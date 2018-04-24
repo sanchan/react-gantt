@@ -38,18 +38,7 @@ const spec = {
   hover(props, monitor, component) {
     const mousePosition = monitor.getClientOffset()
 
-    const layerStyles = {
-      pointerEvents: 'none',
-      backgroundColor: '#ccc',
-      minWidth: '80px',
-      height: '40px',
-      position: 'absolute',
-      left: mousePosition.x,
-      top: mousePosition.y,
-    }
-
     if (monitor.isOver({ shallow: true })) {
-      // props.renderDraggedItem(<div style={layerStyles}>Delete ⚔️</div>)
       props.renderDraggedItem(<DragItemPreview x={mousePosition.x} y={mousePosition.y}>😵</DragItemPreview>)
     }
   }

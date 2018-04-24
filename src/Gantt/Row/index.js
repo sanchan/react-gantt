@@ -46,15 +46,13 @@ class Row extends Component {
     <DragItem
       key={idx}
       item={item}
-      onDrop={this.props.onDrop} // NOTE What's this for?
+      onDrop={this.props.onDrop}
       style={this.stylesForItem(item)}
     />
   )
 
   render() {
     const { items, connectDropTarget, isOver, canDrop, itemType, children } = this.props;
-
-    console.log('Row.render')
 
     return connectDropTarget(
       <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')}>
@@ -77,6 +75,12 @@ const snapToRow = (sourceOffset, componentClientReact, row) => {
   return {
     x: (Math.round(currentValue.x / row.data.step) * row.data.step) + componentClientReact.x,
     y: componentClientReact.y
+  }
+}
+
+const getDropData = (x, y, componentClientReact) => {
+  return {
+    start: x - componentClientReact.x,
   }
 }
 
@@ -132,7 +136,7 @@ const spec = {
     prevX = x
     prevY = y
 
-    props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>)
+    props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
   }
 };
 

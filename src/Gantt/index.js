@@ -59,26 +59,42 @@ class Gantt extends Component {
       return;
     }
 
-    // console.log({ item, target })
+    console.log({ item, target })
+    const { dropItemData } = this.state
 
-    // const rowId =
+    console.log('dropItemData', _.get(dropItemData, 'start', 'xxxx'))
 
-    const newItems = _.map(this.state.items, (i) => (
-      item.id === i.id ? { ...i, rowId: target.id } : i
-    ))
+
+
+    const newItems = _.map(this.state.items, (i) => {
+      const newStart = _.get(dropItemData, 'start', i.data.start);
+      const newEnd = _.get(dropItemData, 'end', i.data.end) - Math.abs(newStart)
+
+      return (
+        item.id === i.id ? {
+          ...i,
+          rowId: target.id,
+          data: {
+            ...i.data,
+            start: newStart,
+            end: newEnd,
+          }
+        } : i
+      )
+    })
 
     this.setState({
       items: newItems
     }, () => {
-      // console.log('forceUpdateGrid')
       this.List.forceUpdateGrid()
     })
   }
 
-  handleRenderDraggedItem = (dragItemComponent) => {
+  handleRenderDraggedItem = (dragItemComponent, dropData) => {
     if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
       this.setState({
-        dragItem: dragItemComponent
+        dragItem: dragItemComponent,
+        dropItemData: dropData,
       });
     }
   }
@@ -86,9 +102,7 @@ class Gantt extends Component {
   renderRow = ({ key, index, isScrolling, isVisible, style }) => {
     const { rows, items } = this.state;
     const row = rows[index]
-    const rowItems = _.filter(items, { rowId: row.id });
-
-    // console.log(row)
+    const rowItems = _.filter(items, { rowId: row.id })
 
     return (
       <div key={index} style={style}>
@@ -103,7 +117,6 @@ class Gantt extends Component {
 
   render() {
     const { rows, dragItem } = this.state;
-    console.log('rebder Gantt')
 
     return (
       <div>
