@@ -15,7 +15,7 @@ import { ItemTypes } from './constants';
  * TODO
  * - Create decorator for components that receive 'renderDraggedItem'
  */
-class Gantt extends Component {
+class GanttApp extends Component {
   // NOTE Right now we are using the state (I'm too lazy to config redux :P), eventually we will move to redux
   static propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({
@@ -52,6 +52,24 @@ class Gantt extends Component {
         end: 96
       }
     }]
+  }
+
+  componentDidMount() {
+      window.addEventListener('scroll', this.handleScroll)
+  }
+
+  componentWillUnmount() {
+      window.removeEventListener('scroll', this.handleScroll)
+  }
+
+  handleScroll(event) {
+    console.log('scroll')
+      // let scrollTop = event.srcElement.body.scrollTop,
+      //     itemTranslate = Math.min(0, scrollTop/3 - 60);
+
+      // this.setState({
+      //   transform: itemTranslate
+      // });
   }
 
   handleDrop = ({ item, target }) => {
