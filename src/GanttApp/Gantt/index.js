@@ -4,16 +4,15 @@ import _ from 'lodash';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import List from 'react-virtualized/dist/commonjs/List'
-import DropCatcher from './DropCatcher';
 import Row from './Row';
-import { ItemTypes } from './constants';
+import { ItemTypes } from '../constants';
 
 
 /**
  * TODO
  * - Create decorator for components that receive 'renderDraggedItem'
  */
-class GanttApp extends Component {
+export default class Gantt extends Component {
   // NOTE Right now we are using the state (I'm too lazy to config redux :P), eventually we will move to redux
   static propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({
@@ -34,40 +33,38 @@ class GanttApp extends Component {
   };
 
   state = {
-    rows: _.times(300, t => ({
-      id: t + 1,
-      data: {
-        start: 0,
-        end: 3000,
-        step: 32, // The sticky gap value
-      }
-    })),
-    items: [{
-      id: 1,
-      rowId: 1,
-      data: {
-        start: 32,
-        end: 96
-      }
-    }]
+    centerValue: moment(),
+    xOffset: 0
   }
 
   componentDidMount() {
-      window.addEventListener('mousewheel', this.handleScroll)
+      // this.Gantt.addEventListener('wheel', this.handleScroll)
+      // this.Gantt.scrollLeft = 1000
   }
 
   componentWillUnmount() {
-      window.removeEventListener('mousewheel', this.handleScroll)
+      // this.Gantt.removeEventListener('wheel', this.handleScroll)
   }
 
+  // NOTE There is a bug in Chrome +59 where SOMETIMES the event.preventDefault() fails
+  // and the browser goes back to the previous page...
+  // https://stackoverflow.com/questions/44899193/cant-prevent-navigation-gesture-in-latest-chrome-version-59-on-mac
   handleScroll(event) {
-    console.log('scroll')
-      // let scrollTop = event.srcElement.body.scrollTop,
-      //     itemTranslate = Math.min(0, scrollTop/3 - 60);
+    console.log('scroll', event.deltaX, event.deltaY)
 
-      // this.setState({
-      //   transform: itemTranslate
-      // });
+    if(event.deltaX) {
+      event.preventDefault()
+      event.stopPropagation()
+      return false
+
+      // window.event.preventDefault()
+      // window.event.stopPropagation()
+      // event.returnValue = false;
+      // return event
+    }
+
+
+
   }
 
   handleDrop = ({ item, target }) => {
@@ -112,7 +109,7 @@ class GanttApp extends Component {
   }
 
   renderRow = ({ key, index, isScrolling, isVisible, style }) => {
-    const { rows, items } = this.state;
+    const { rows, items } = this.props;
     const row = rows[index]
     const rowItems = _.filter(items, { rowId: row.id })
 
@@ -128,26 +125,27 @@ class GanttApp extends Component {
   }
 
   render() {
-    const { rows, dragItem } = this.state;
+    const { rows } = this.props;
+
+    console.log('rows', rows)
 
     return (
-      <div>
+      <div
+        ref={ref => this.Gantt = ref}
+        style={{ width: '100%', overflow: 'scroll' }}
+        onWheel={this.handleScroll}
+      >
         <List
           ref={ref => this.List = ref}
-          dragItem={dragItem}
           height={800}
           overscanRowCount={10}
           // noRowsRenderer={this._noRowsRenderer}
           rowCount={rows.length}
           rowHeight={this._getRowHeight}
           rowRenderer={this.renderRow}
-          width={1000}
+          width={8000}
         />
-
-        <CustomDragLayer dragItem={dragItem} />
       </div>
     );
   }
 }
-
-export default DragDropContext(HTML5Backend)(Gantt)

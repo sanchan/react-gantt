@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import cx from 'classnames';
-import { ItemTypes } from '../constants';
+import { ItemTypes } from '../../constants';
 import { DropTarget } from 'react-dnd';
 import DragItem from '../DragItem';
-import DragItemPreview from '../DragItemPreview';
-import snapToGrid from '../snapToGrid'
+import DragItemPreview from '../../DragItemPreview';
 import styles from './styles.css';
 
 class Row extends Component {

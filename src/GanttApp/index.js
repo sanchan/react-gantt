@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import List from 'react-virtualized/dist/commonjs/List'
+import Gantt from './Gantt';
 import CustomDragLayer from './CustomDragLayer';
 import DropCatcher from './DropCatcher';
 import TrashCan from './TrashCan';
@@ -111,7 +112,7 @@ class GanttApp extends Component {
   handleRenderDraggedItem = (dragItemComponent, dropData) => {
     if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
       this.setState({
-        dragItem: dragItemComponent,
+        dragItem: dragItemComponent, // TODO Rename dragItem -> previewItem ?
         dropItemData: dropData,
       });
     }
@@ -134,32 +135,23 @@ class GanttApp extends Component {
   }
 
   render() {
-    const { rows, dragItem } = this.state;
+    const { rows, items, dragItem } = this.state;
+
+    console.log('rows 1', rows)
 
     return (
       <div>
         <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
-          <List
-            ref={ref => this.List = ref}
-            dragItem={dragItem}
-            height={800}
-            overscanRowCount={10}
-            // noRowsRenderer={this._noRowsRenderer}
-            rowCount={rows.length}
-            rowHeight={this._getRowHeight}
-            rowRenderer={this.renderRow}
-            width={1000}
-          />
-          {
-            // _.map(rows, this.renderRow)
-          }
+          <Gantt rows={rows} items={items} />
           <TrashCan renderDraggedItem={this.handleRenderDraggedItem} />
         </DropCatcher>
 
+        {dragItem &&
         <CustomDragLayer dragItem={dragItem} />
+        }
       </div>
     );
   }
 }
 
-export default DragDropContext(HTML5Backend)(Gantt)
+export default DragDropContext(HTML5Backend)(GanttApp)
