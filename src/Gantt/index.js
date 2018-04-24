@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import List from 'react-virtualized/dist/commonjs/List'
 import CustomDragLayer from './CustomDragLayer';
 import DropCatcher from './DropCatcher';
 import TrashCan from './TrashCan';
@@ -35,7 +36,7 @@ class Gantt extends Component {
   };
 
   state = {
-    rows: _.times(100, t => ({
+    rows: _.times(300, t => ({
       id: t + 1,
       data: {
         start: 0,
@@ -58,12 +59,19 @@ class Gantt extends Component {
       return;
     }
 
+    // console.log({ item, target })
+
+    // const rowId =
+
     const newItems = _.map(this.state.items, (i) => (
-      item.id === i.id ? { ...i, rowId: target.id} : i
+      item.id === i.id ? { ...i, rowId: target.id } : i
     ))
 
     this.setState({
       items: newItems
+    }, () => {
+      // console.log('forceUpdateGrid')
+      this.List.forceUpdateGrid()
     })
   }
 
@@ -75,22 +83,45 @@ class Gantt extends Component {
     }
   }
 
-  renderRow = (row, idx) => {
-    const { items } = this.state;
+  renderRow = ({ key, index, isScrolling, isVisible, style }) => {
+    const { rows, items } = this.state;
+    const row = rows[index]
     const rowItems = _.filter(items, { rowId: row.id });
 
+    // console.log(row)
+
     return (
-      <Row key={idx} row={row} items={rowItems} onDrop={this.handleDrop} renderDraggedItem={this.handleRenderDraggedItem} />
+      <div key={index} style={style}>
+        <Row row={row} items={rowItems} onDrop={this.handleDrop} renderDraggedItem={this.handleRenderDraggedItem} />
+      </div>
     )
+  }
+
+  _getRowHeight({index}) {
+    return 40
   }
 
   render() {
     const { rows, dragItem } = this.state;
+    console.log('rebder Gantt')
 
     return (
       <div>
         <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
-          {_.map(rows, this.renderRow)}
+          <List
+            ref={ref => this.List = ref}
+            dragItem={dragItem}
+            height={800}
+            overscanRowCount={10}
+            // noRowsRenderer={this._noRowsRenderer}
+            rowCount={rows.length}
+            rowHeight={this._getRowHeight}
+            rowRenderer={this.renderRow}
+            width={1000}
+          />
+          {
+            // _.map(rows, this.renderRow)
+          }
           <TrashCan renderDraggedItem={this.handleRenderDraggedItem} />
         </DropCatcher>
 

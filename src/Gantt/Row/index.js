@@ -23,6 +23,11 @@ class Row extends Component {
     itemType: PropTypes.string.isRequired,
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // return false
+    return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+  }
+
   /**
    * We must make transformation using:
    * - item.data.start: The item's start value/timestamp;
@@ -38,11 +43,18 @@ class Row extends Component {
   }
 
   renderItem = (item, idx) => (
-    <DragItem key={idx} item={item} onDrop={this.props.onDrop} style={this.stylesForItem(item)} />
+    <DragItem
+      key={idx}
+      item={item}
+      onDrop={this.props.onDrop} // NOTE What's this for?
+      style={this.stylesForItem(item)}
+    />
   )
 
   render() {
     const { items, connectDropTarget, isOver, canDrop, itemType, children } = this.props;
+
+    console.log('Row.render')
 
     return connectDropTarget(
       <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')}>
