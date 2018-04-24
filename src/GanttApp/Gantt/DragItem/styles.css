@@ -1,0 +1,13 @@
+.drag-item {
+  cursor: move;
+  display: inline-block;
+  background: #ccc;
+  min-width: 80px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+}
+
+.drag-item.dragging {
+}
+
