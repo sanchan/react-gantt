@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import * as moment from 'moment';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import List from 'react-virtualized/dist/commonjs/List'
+import List from 'react-virtualized/dist/commonjs/List';
 import Row from './Row';
 import { ItemTypes } from '../constants';
 

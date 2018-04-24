@@ -8,7 +8,6 @@ import Gantt from './Gantt';
 import CustomDragLayer from './CustomDragLayer';
 import DropCatcher from './DropCatcher';
 import TrashCan from './TrashCan';
-import Row from './Row';
 import { ItemTypes } from './constants';
 
 
@@ -118,21 +117,6 @@ class GanttApp extends Component {
     }
   }
 
-  renderRow = ({ key, index, isScrolling, isVisible, style }) => {
-    const { rows, items } = this.state;
-    const row = rows[index]
-    const rowItems = _.filter(items, { rowId: row.id })
-
-    return (
-      <div key={index} style={style}>
-        <Row row={row} items={rowItems} onDrop={this.handleDrop} renderDraggedItem={this.handleRenderDraggedItem} />
-      </div>
-    )
-  }
-
-  _getRowHeight({index}) {
-    return 40
-  }
 
   render() {
     const { rows, items, dragItem } = this.state;
