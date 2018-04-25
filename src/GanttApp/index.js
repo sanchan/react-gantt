@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import * as moment from 'moment';
 import List from 'react-virtualized/dist/commonjs/List'
 import Gantt from './Gantt';
 import CustomDragLayer from './CustomDragLayer';
@@ -39,19 +40,23 @@ class GanttApp extends Component {
     rows: _.times(300, t => ({
       id: t + 1,
       data: {
-        start: 0,
-        end: 3000,
-        step: 32, // The sticky gap value
+        user: {
+          id: t + 1,
+          name: `User ${t + 1}`
+        },
       }
     })),
-    items: [{
-      id: 1,
-      rowId: 1,
+    items: _.times(300, t => ({
+      id: t + 1,
+      rowId: t + 1,
       data: {
-        start: 32,
-        end: 96
+        start: moment(),
+        end: moment().add(2, 'hour')
+        // start: 32,
+        // end: 96
       }
-    }]
+    })),
+    stepDuration: moment.duration(15, 'minutes')
   }
 
   componentDidMount() {
@@ -119,14 +124,14 @@ class GanttApp extends Component {
 
 
   render() {
-    const { rows, items, dragItem } = this.state;
+    const { rows, items, stepDuration, dragItem } = this.state;
 
     console.log('rows 1', rows)
 
     return (
       <div>
         <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
-          <Gantt rows={rows} items={items} />
+          <Gantt rows={rows} items={items} stepDuration={stepDuration} />
           <TrashCan renderDraggedItem={this.handleRenderDraggedItem} />
         </DropCatcher>
 

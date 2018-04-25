@@ -22,6 +22,9 @@ class Row extends Component {
     itemType: PropTypes.string.isRequired,
   };
 
+  state = {
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     // return false
     return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
@@ -35,8 +38,13 @@ class Row extends Component {
    * - Row.end: The row's end value/timestamp.
    */
   stylesForItem = (item) => {
+    const { xOffset } = this.props
+
+    console.log('xOffset',item)
+
     return {
-      left: item.data.start,
+      left: 0 + xOffset,
+      // width: item.data.end - item.data.start
       width: item.data.end - item.data.start
     }
   }

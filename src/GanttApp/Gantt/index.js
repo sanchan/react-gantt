@@ -16,6 +16,7 @@ import { ItemTypes } from '../constants';
 export default class Gantt extends Component {
   // NOTE Right now we are using the state (I'm too lazy to config redux :P), eventually we will move to redux
   static propTypes = {
+    // stepDuration:
     rows: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       data: PropTypes.shape({
@@ -35,12 +36,24 @@ export default class Gantt extends Component {
 
   state = {
     centerValue: moment(),
-    xOffset: 0
+    centerPixels: 0, // NOTE Needed?
+    xOffset: 0,
+  }
+
+  constructor(props) {
+    super(props)
   }
 
   componentDidMount() {
+      // const { stepDuration } = this.props
+      const centerPixels = this.Gantt.offsetWidth / 2
+
+      this.setState({
+        centerPixels
+      })
+
       // this.Gantt.addEventListener('wheel', this.handleScroll)
-      // this.Gantt.scrollLeft = 1000
+      this.Gantt.scrollTop = 1
   }
 
   componentWillUnmount() {
@@ -50,13 +63,17 @@ export default class Gantt extends Component {
   // NOTE There is a bug in Chrome +59 where SOMETIMES the event.preventDefault() fails
   // and the browser goes back to the previous page...
   // https://stackoverflow.com/questions/44899193/cant-prevent-navigation-gesture-in-latest-chrome-version-59-on-mac
-  handleScroll(event) {
-    console.log('scroll', event.deltaX, event.deltaY)
+  handleScroll = (event) => {
+    // console.log('scroll', event.deltaX, event.deltaY)
 
     if(event.deltaX) {
       event.preventDefault()
       event.stopPropagation()
-      return false
+      this.setState({
+        xOffset: this.state.xOffset + event.deltaX
+      })
+      this.List.forceUpdateGrid()
+      return event.returnValue = false
 
       // window.event.preventDefault()
       // window.event.stopPropagation()
@@ -110,13 +127,22 @@ export default class Gantt extends Component {
   }
 
   renderRow = ({ key, index, isScrolling, isVisible, style }) => {
-    const { rows, items } = this.props;
+    const { rows, items } = this.props
+    const { xOffset } = this.state
     const row = rows[index]
     const rowItems = _.filter(items, { rowId: row.id })
 
     return (
       <div key={index} style={style}>
-        <Row row={row} items={rowItems} onDrop={this.handleDrop} renderDraggedItem={this.handleRenderDraggedItem} />
+        <Row
+          xOffset={xOffset}
+          row={row}
+          items={rowItems}
+          onDrop={this.handleDrop}
+          renderDraggedItem={this.handleRenderDraggedItem}
+
+          // centerPixels={centerPixels}
+        />
       </div>
     )
   }
@@ -128,12 +154,15 @@ export default class Gantt extends Component {
   render() {
     const { rows } = this.props;
 
-    console.log('rows', rows)
-
     return (
       <div
         ref={ref => this.Gantt = ref}
-        style={{ width: '100%', overflow: 'scroll' }}
+        style={{
+          width: '100%',
+          height: 800,
+          overflow: 'scroll',
+          position: 'relative'
+        }}
         onWheel={this.handleScroll}
       >
         <List
@@ -144,7 +173,7 @@ export default class Gantt extends Component {
           rowCount={rows.length}
           rowHeight={this._getRowHeight}
           rowRenderer={this.renderRow}
-          width={8000}
+          width={3000}
         />
       </div>
     );
