@@ -53,7 +53,8 @@ export default class Gantt extends Component {
       })
 
       // this.Gantt.addEventListener('wheel', this.handleScroll)
-      this.Gantt.scrollTop = 1
+      // this.Gantt.scrollTop = 0
+      // this.List.scrollLeft = 1500
   }
 
   componentWillUnmount() {
@@ -129,7 +130,7 @@ export default class Gantt extends Component {
   }
 
   renderRow = ({ key, index, isScrolling, isVisible, style }) => {
-    const { rows, items } = this.props
+    const { rows, items, stepDuration } = this.props
     const { xOffset, centerPixels, centerValue } = this.state
     const row = rows[index]
     const rowItems = _.filter(items, { rowId: row.id })
@@ -138,6 +139,7 @@ export default class Gantt extends Component {
       <div key={index} style={style}>
         <Row
           xOffset={xOffset}
+          stepDuration={stepDuration}
           row={row}
           items={rowItems}
           onDrop={this.handleDrop}

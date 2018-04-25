@@ -34,6 +34,11 @@ class Row extends Component {
     return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
   }
 
+  itemWidth = (item) => {
+    const { stepDuration } = this.props
+    return (item.data.end.unix() - item.data.start.unix()) / stepDuration.asMilliseconds()
+  }
+
   /**
    * We must make transformation using:
    * - item.data.start: The item's start value/timestamp;
@@ -48,8 +53,7 @@ class Row extends Component {
 
     return {
       left: 0 + xOffset,
-      // width: item.data.end - item.data.start
-      width: item.data.end - item.data.start
+      width: this.itemWidth(item)
     }
   }
 
