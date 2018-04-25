@@ -131,7 +131,7 @@ class GanttApp extends Component {
     return (
       <div>
         <DropCatcher renderDraggedItem={this.handleRenderDraggedItem}>
-          <Gantt rows={rows} items={items} stepDuration={stepDuration} />
+          <Gantt rows={rows} items={items} stepDuration={stepDuration}/>
           <TrashCan renderDraggedItem={this.handleRenderDraggedItem} />
         </DropCatcher>
 

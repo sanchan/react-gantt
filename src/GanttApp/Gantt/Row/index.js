@@ -77,7 +77,7 @@ class Row extends Component {
   }
 }
 
-const snapToRow = (sourceOffset, componentClientReact, row) => {
+const snapToRow = (sourceOffset, componentClientReact, row, stepDuration) => {
   const snappedX = Math.round(sourceOffset.x / row.data.step) * row.data.step
 
   // This is were the potential new position of the item,
@@ -87,8 +87,12 @@ const snapToRow = (sourceOffset, componentClientReact, row) => {
     y: sourceOffset.y - componentClientReact.y,
   }
 
+  console.log(currentValue.x, stepDuration.asMilliseconds(), componentClientReact.x)
+  // console.log((Math.round(currentValue.x / stepDuration.asMilliseconds()) * stepDuration.asMilliseconds()) + componentClientReact.x)
+
   return {
-    x: (Math.round(currentValue.x / row.data.step) * row.data.step) + componentClientReact.x,
+    x: (Math.round(currentValue.x / stepDuration.asMilliseconds()) * stepDuration.asMilliseconds()) + componentClientReact.x,
+    // x: 0,
     y: componentClientReact.y
   }
 }
@@ -141,15 +145,20 @@ const spec = {
 
     const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
 
-    const { x, y } = snapToRow(sourceOffset, componentClientReact, props.row)
+    const { x, y } = snapToRow(sourceOffset, componentClientReact, props.row, props.stepDuration)
+
 
     // We do this check to avoid unnecessary renders of <DragItemPreview>
     if (x === prevX && y === prevY) {
       return;
     }
 
+
+
     prevX = x
     prevY = y
+
+    console.log({ x, y })
 
     props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
   }

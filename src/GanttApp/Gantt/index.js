@@ -6,6 +6,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import List from 'react-virtualized/dist/commonjs/List';
 import Row from './Row';
+import CustomDragLayer from '../CustomDragLayer';
 import { ItemTypes } from '../constants';
 
 
@@ -158,6 +159,7 @@ export default class Gantt extends Component {
 
   render() {
     const { rows } = this.props;
+    const { dragItem } = this.state;
 
     return (
       <div
@@ -180,6 +182,10 @@ export default class Gantt extends Component {
           rowRenderer={this.renderRow}
           width={3000}
         />
+
+        {dragItem &&
+        <CustomDragLayer dragItem={dragItem} />
+        }
       </div>
     );
   }
