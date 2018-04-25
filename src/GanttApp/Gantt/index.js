@@ -64,16 +64,18 @@ export default class Gantt extends Component {
   // and the browser goes back to the previous page...
   // https://stackoverflow.com/questions/44899193/cant-prevent-navigation-gesture-in-latest-chrome-version-59-on-mac
   handleScroll = (event) => {
-    // console.log('scroll', event.deltaX, event.deltaY)
 
     if(event.deltaX) {
+      console.log('scroll', event.deltaX, event.deltaY)
       event.preventDefault()
       event.stopPropagation()
-      this.setState({
-        xOffset: this.state.xOffset + event.deltaX
-      })
-      this.List.forceUpdateGrid()
-      return event.returnValue = false
+      if (!event.deltaY) {
+        this.setState({
+          xOffset: this.state.xOffset + event.deltaX
+        })
+        this.List.forceUpdateGrid()
+        return event.returnValue = false
+      }
 
       // window.event.preventDefault()
       // window.event.stopPropagation()
@@ -83,9 +85,6 @@ export default class Gantt extends Component {
 
     this.List.forceUpdateGrid()
     return event
-
-
-
   }
 
   handleDrop = ({ item, target }) => {

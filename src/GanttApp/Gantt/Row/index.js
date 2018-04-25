@@ -44,7 +44,7 @@ class Row extends Component {
   stylesForItem = (item) => {
     const { xOffset } = this.props
 
-    console.log('xOffset',xOffset)
+    // console.log('xOffset',xOffset)
 
     return {
       left: 0 + xOffset,
