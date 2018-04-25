@@ -81,6 +81,9 @@ export default class Gantt extends Component {
       // return event
     }
 
+    this.List.forceUpdateGrid()
+    return event
+
 
 
   }
@@ -128,7 +131,7 @@ export default class Gantt extends Component {
 
   renderRow = ({ key, index, isScrolling, isVisible, style }) => {
     const { rows, items } = this.props
-    const { xOffset } = this.state
+    const { xOffset, centerPixels, centerValue } = this.state
     const row = rows[index]
     const rowItems = _.filter(items, { rowId: row.id })
 
@@ -141,7 +144,8 @@ export default class Gantt extends Component {
           onDrop={this.handleDrop}
           renderDraggedItem={this.handleRenderDraggedItem}
 
-          // centerPixels={centerPixels}
+          centerPixels={centerPixels}
+          centerValue={centerValue}
         />
       </div>
     )

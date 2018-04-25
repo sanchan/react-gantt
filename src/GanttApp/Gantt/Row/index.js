@@ -20,6 +20,10 @@ class Row extends Component {
     isOver: PropTypes.bool.isRequired,
     canDrop: PropTypes.bool.isRequired,
     itemType: PropTypes.string.isRequired,
+
+    // From Gantt
+    centerPixels: PropTypes.number.isRequired,
+    centerValue: PropTypes.number.isRequired,
   };
 
   state = {
@@ -40,7 +44,7 @@ class Row extends Component {
   stylesForItem = (item) => {
     const { xOffset } = this.props
 
-    console.log('xOffset',item)
+    console.log('xOffset',xOffset)
 
     return {
       left: 0 + xOffset,
