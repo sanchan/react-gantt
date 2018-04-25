@@ -10,6 +10,8 @@ import CustomDragLayer from '../CustomDragLayer';
 import { ItemTypes } from '../constants';
 
 
+const GANTT_WIDTH = 10000000000
+
 /**
  * TODO
  * - Create decorator for components that receive 'renderDraggedItem'
@@ -145,6 +147,7 @@ export default class Gantt extends Component {
           items={rowItems}
           onDrop={this.handleDrop}
           renderDraggedItem={this.handleRenderDraggedItem}
+          width={GANTT_WIDTH}
 
           centerPixels={centerPixels}
           centerValue={centerValue}
@@ -180,7 +183,7 @@ export default class Gantt extends Component {
           rowCount={rows.length}
           rowHeight={this._getRowHeight}
           rowRenderer={this.renderRow}
-          width={3000}
+          width={GANTT_WIDTH}
         />
 
         {dragItem &&

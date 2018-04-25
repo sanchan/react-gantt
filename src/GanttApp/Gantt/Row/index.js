@@ -67,10 +67,10 @@ class Row extends Component {
   )
 
   render() {
-    const { items, connectDropTarget, isOver, canDrop, itemType, children } = this.props;
+    const { items, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
     return connectDropTarget(
-      <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')}>
+      <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')} style={{ width }}>
         {_.map(items, this.renderItem)}
       </div>
     );
