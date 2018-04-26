@@ -7,7 +7,12 @@ import { ItemTypes } from '../../constants';
 import { DropTarget } from 'react-dnd';
 import DragItem from '../DragItem';
 import DragItemPreview from '../../DragItemPreview';
+// import AsyncChild from 'react-async-child';
+import AsyncChild from './AsyncChild';
 import styles from './styles.css';
+
+
+let t0, t1
 
 class Row extends Component {
   static propTypes = {
@@ -27,12 +32,37 @@ class Row extends Component {
   };
 
   state = {
+    children: []
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return false
-    // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+  componentDidMount() {
+    const { items } = this.props;
+
+    new Promise(resolve => {
+      const children = _.map(items, this.renderItem);
+
+
+      this.setState({ children })
+      resolve(children)
+    })
   }
+
+  componentWillUpdate() {
+    t0 = performance.now();
+
+  }
+
+  componentDidUpdate() {
+    t1 = performance.now();
+    console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
+  }
+
+
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return false
+  //   // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+  // }
 
   itemWidth = (item) => {
     const { stepDuration } = this.props
@@ -66,14 +96,21 @@ class Row extends Component {
     />
   )
 
+  renderItems = () => {
+    const { items } = this.props;
+
+    return new Promise(resolve => resolve(<div>{_.map(items, this.renderItem)}</div>))
+  }
+
   render() {
     const { items, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
-    console.log('Row.render')
+    console.log('Row.render', this.state.children.length)
+    // { async () => await this.renderItems }
 
     return connectDropTarget(
-      <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')}>
-        {_.map(items, this.renderItem)}
+      <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
+        {this.state.children}
       </div>
     );
   }
@@ -160,7 +197,7 @@ const spec = {
     prevX = x
     prevY = y
 
-    console.log({ x, y })
+    // console.log({ x, y })
 
     props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
   }

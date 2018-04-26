@@ -25,6 +25,8 @@ class DragItem extends Component {
   render() {
     const { connectDragSource, isDragging, style } = this.props;
 
+    // console.log('DragItem.render')
+
     if (isDragging) {
       return null;
     }
