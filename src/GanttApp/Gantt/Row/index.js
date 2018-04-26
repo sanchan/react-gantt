@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -30,8 +30,8 @@ class Row extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // return false
-    return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+    return false
+    // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
   }
 
   itemWidth = (item) => {
@@ -49,7 +49,7 @@ class Row extends Component {
   stylesForItem = (item) => {
     const { xOffset } = this.props
 
-    // console.log('xOffset',xOffset)
+    // console.log('this.itemWidth(item)',this.itemWidth(item))
 
     return {
       left: 0 + xOffset,
@@ -69,8 +69,10 @@ class Row extends Component {
   render() {
     const { items, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
+    console.log('Row.render')
+
     return connectDropTarget(
-      <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')} style={{ width }}>
+      <div className={cx("row", itemType && !canDrop && 'cant-drop', itemType && isOver && 'is-over')}>
         {_.map(items, this.renderItem)}
       </div>
     );
@@ -87,7 +89,7 @@ const snapToRow = (sourceOffset, componentClientReact, row, stepDuration) => {
     y: sourceOffset.y - componentClientReact.y,
   }
 
-  console.log(currentValue.x, stepDuration.asMilliseconds(), componentClientReact.x)
+  // console.log(currentValue.x, stepDuration.asMilliseconds(), componentClientReact.x)
   // console.log((Math.round(currentValue.x / stepDuration.asMilliseconds()) * stepDuration.asMilliseconds()) + componentClientReact.x)
 
   return {

@@ -10,7 +10,7 @@ import CustomDragLayer from './CustomDragLayer';
 import DropCatcher from './DropCatcher';
 import TrashCan from './TrashCan';
 import { ItemTypes } from './constants';
-
+import './styles.css';
 
 /**
  * TODO
@@ -46,25 +46,30 @@ class GanttApp extends Component {
         },
       }
     })),
-    items: _.times(300, t => ({
-      id: t + 1,
-      rowId: t + 1,
-      data: {
-        start: moment(),
-        end: moment().add(2, 'hour')
-        // start: 32,
-        // end: 96
-      }
-    })),
+    items: _.flatten(_.times(300, r => (
+      _.times(30, t => ({
+        id: r + t + 1,
+        rowId: r + 1,
+        data: {
+          start: moment(),
+          end: moment().add(2, 'hour')
+          // start: 32,
+          // end: 96
+        }
+      }))
+    ))),
+
+
+
     stepDuration: moment.duration(15, 'minutes')
   }
 
   componentDidMount() {
-      window.addEventListener('scroll', this.handleScroll)
+      // window.addEventListener('scroll', this.handleScroll)
   }
 
   componentWillUnmount() {
-      window.removeEventListener('scroll', this.handleScroll)
+      // window.removeEventListener('scroll', this.handleScroll)
   }
 
   handleScroll(event) {

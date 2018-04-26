@@ -136,18 +136,20 @@ export default class Gantt extends Component {
     const { rows, items, stepDuration } = this.props
     const { xOffset, centerPixels, centerValue } = this.state
     const row = rows[index]
-    const rowItems = _.filter(items, { rowId: row.id })
+    // const rowItems = _.filter(items, { rowId: row.id })
+    const rowItems = _.sampleSize(items, 300)
+
+    // console.log('renderRow')
+    // return <div key={index} style={{ ...style, width: GANTT_WIDTH }}>xxxx</div>
 
     return (
-      <div key={index} style={style}>
+      <div key={index} style={{ ...style, width: GANTT_WIDTH }}>
         <Row
-          xOffset={xOffset}
           stepDuration={stepDuration}
           row={row}
           items={rowItems}
           onDrop={this.handleDrop}
           renderDraggedItem={this.handleRenderDraggedItem}
-          width={GANTT_WIDTH}
 
           centerPixels={centerPixels}
           centerValue={centerValue}
@@ -173,7 +175,7 @@ export default class Gantt extends Component {
           overflow: 'scroll',
           position: 'relative'
         }}
-        onWheel={this.handleScroll}
+        // onWheel={this.handleScroll}
       >
         <List
           ref={ref => this.List = ref}

@@ -17,6 +17,11 @@ class DragItem extends Component {
 		})
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return false
+    // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+  }
+
   render() {
     const { connectDragSource, isDragging, style } = this.props;
 

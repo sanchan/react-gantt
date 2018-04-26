@@ -6,7 +6,6 @@ import { ItemTypes } from '../constants';
 import { DropTarget } from 'react-dnd';
 
 const layerStyles = {
-  backgroundColor: '#fafafa',
   cursor: 'move',
   position: 'fixed',
   left: 0,
