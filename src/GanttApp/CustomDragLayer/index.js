@@ -32,6 +32,11 @@ class CustomDragLayer extends Component {
     snapToGrid: PropTypes.bool.isRequired,
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // return false
+    return nextProps.dragItem ? (this.props.dragItem.props.x !== nextProps.dragItem.props.x) || (this.props.dragItem.props.y !== nextProps.dragItem.props.y) : false
+  }
+
   renderItem(type, item) {
     console.log('ItemTypes.TASK', ItemTypes.TASK)
     switch (type) {
@@ -42,15 +47,6 @@ class CustomDragLayer extends Component {
     }
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (_.get(this.props, 'dragItem.x') === _.get(nextProps, 'dragItem.x') && _.get(this.props, 'dragItem.y') === _.get(nextProps, 'dragItem.y')) {
-  //     console.log('false')
-  //     return false
-  //   }
-  //   console.log('true')
-  //   return true
-  // }
-
   render() {
     const { item, itemType, isDragging, dragItem } = this.props
 
@@ -58,7 +54,7 @@ class CustomDragLayer extends Component {
       return null
     }
 
-    console.log('CustomDragLayer', this.props)
+    console.log('CustomDragLayer.render', this.props)
 
     return (
       dragItem ||

@@ -37,25 +37,7 @@ class Row extends Component {
 
   componentDidMount() {
     const { items } = this.props;
-
-    // new Promise(resolve => {
-    //   const children = _.map(items, this.renderItem);
-
-
-    //   this.setState({ children })
-    //   resolve(children)
-    // })
   }
-
-  // componentWillUpdate() {
-  //   t0 = performance.now();
-
-  // }
-
-  // componentDidUpdate() {
-  //   t1 = performance.now();
-  //   console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
-  // }
 
 
 
@@ -79,8 +61,6 @@ class Row extends Component {
   stylesForItem = (item) => {
     const { xOffset } = this.props
 
-    // console.log('this.itemWidth(item)',this.itemWidth(item))
-
     return {
       left: 0 + xOffset,
       width: this.itemWidth(item)
@@ -91,28 +71,27 @@ class Row extends Component {
     <DragItem
       key={idx}
       item={item}
-      enableEvents={this.props.items.length - 1 === idx}
+      enableEvents={this.props.row.data.items.length - 1 === idx}
       onDrop={this.props.onDrop}
       style={this.stylesForItem(item)}
     />
   )
 
   renderItems = () => {
-    const { items } = this.props;
+    const { row } = this.props;
 
-    return new Promise(resolve => resolve(<div>{_.map(items, this.renderItem)}</div>))
+    return new Promise(resolve => resolve(<div>{_.map(row.data.items, this.renderItem)}</div>))
   }
 
   render() {
-    const { items, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
+    const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
-    console.log('Row.render', this.state.children.length)
+    console.log('Row.render', row)
     // { async () => await this.renderItems }
 
     return connectDropTarget(
       <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
-        {/*this.state.children*/}
-        {_.map(items, this.renderItem)}
+        {_.map(row.data.items, this.renderItem)}
       </div>
     );
   }
@@ -128,12 +107,10 @@ const snapToRow = (sourceOffset, componentClientReact, row, stepDuration) => {
     y: sourceOffset.y - componentClientReact.y,
   }
 
-  // console.log(currentValue.x, stepDuration.asMilliseconds(), componentClientReact.x)
-  // console.log((Math.round(currentValue.x / stepDuration.asMilliseconds()) * stepDuration.asMilliseconds()) + componentClientReact.x)
-
   return {
-    x: (Math.round(currentValue.x / stepDuration.asMilliseconds()) * stepDuration.asMilliseconds()) + componentClientReact.x,
+    // x: (Math.round(currentValue.x / stepDuration.asMilliseconds()) * stepDuration.asMilliseconds()) + componentClientReact.x,
     // x: 0,
+    x: componentClientReact.x,
     y: componentClientReact.y
   }
 }
@@ -162,7 +139,7 @@ const spec = {
   },
 
   hover(props, monitor, component) {
-    console.log('hx hover')
+    console.log('Row hover')
     // return false;
     t0 = performance.now();
 
@@ -194,7 +171,7 @@ const spec = {
 
 
     t1 = performance.now();
-    console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
+    // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
 
 
     // We do this check to avoid unnecessary renders of <DragItemPreview>
@@ -207,8 +184,7 @@ const spec = {
     prevX = x
     prevY = y
 
-    // console.log({ x, y })
-    console.log('xxxxxxxx')
+    console.log({x,y})
 
     props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
   }
@@ -216,10 +192,9 @@ const spec = {
 
 function collect(connect, monitor) {
 
-  console.log('hx  monitor.isOver()')
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
+    isOver: monitor.isOver({ shallow: true }),
     canDrop: monitor.canDrop(),
     itemType: monitor.getItemType()
   };

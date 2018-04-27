@@ -70,7 +70,6 @@ export default class Gantt extends Component {
   handleScroll = (event) => {
 
     if(event.deltaX) {
-      console.log('scroll', event.deltaX, event.deltaY)
       event.preventDefault()
       event.stopPropagation()
       if (!event.deltaY) {
@@ -96,7 +95,6 @@ export default class Gantt extends Component {
       return;
     }
 
-    console.log({ item, target })
     const { dropItemData } = this.state
 
     const newItems = _.map(this.state.items, (i) => {
@@ -137,9 +135,7 @@ export default class Gantt extends Component {
     const { xOffset, centerPixels, centerValue } = this.state
     const row = rows[index]
     // const rowItems = _.filter(items, { rowId: row.id })
-    const rowItems = _.sampleSize(items, 300)
 
-    // console.log('renderRow')
     // return <div key={index} style={{ ...style, width: GANTT_WIDTH }}>xxxx</div>
 
     return (
@@ -147,7 +143,6 @@ export default class Gantt extends Component {
         <Row
           stepDuration={stepDuration}
           row={row}
-          items={rowItems}
           onDrop={this.handleDrop}
           renderDraggedItem={this.handleRenderDraggedItem}
 
@@ -165,6 +160,8 @@ export default class Gantt extends Component {
   render() {
     const { rows } = this.props;
     const { dragItem } = this.state;
+
+    console.log('Gantt.render')
 
     return (
       <div
