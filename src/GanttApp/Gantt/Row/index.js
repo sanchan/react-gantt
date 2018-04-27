@@ -38,31 +38,31 @@ class Row extends Component {
   componentDidMount() {
     const { items } = this.props;
 
-    new Promise(resolve => {
-      const children = _.map(items, this.renderItem);
+    // new Promise(resolve => {
+    //   const children = _.map(items, this.renderItem);
 
 
-      this.setState({ children })
-      resolve(children)
-    })
+    //   this.setState({ children })
+    //   resolve(children)
+    // })
   }
 
-  componentWillUpdate() {
-    t0 = performance.now();
+  // componentWillUpdate() {
+  //   t0 = performance.now();
 
-  }
-
-  componentDidUpdate() {
-    t1 = performance.now();
-    console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
-  }
-
-
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return false
-  //   // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
   // }
+
+  // componentDidUpdate() {
+  //   t1 = performance.now();
+  //   console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
+  // }
+
+
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // return false
+    return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+  }
 
   itemWidth = (item) => {
     const { stepDuration } = this.props
@@ -91,6 +91,7 @@ class Row extends Component {
     <DragItem
       key={idx}
       item={item}
+      enableEvents={this.props.items.length - 1 === idx}
       onDrop={this.props.onDrop}
       style={this.stylesForItem(item)}
     />
@@ -110,7 +111,8 @@ class Row extends Component {
 
     return connectDropTarget(
       <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
-        {this.state.children}
+        {/*this.state.children*/}
+        {_.map(items, this.renderItem)}
       </div>
     );
   }
@@ -160,6 +162,10 @@ const spec = {
   },
 
   hover(props, monitor, component) {
+    console.log('hx hover')
+    // return false;
+    t0 = performance.now();
+
     // The exact mouse coordinates relative to the 'viewport' when the drag starts
     const initialClientOffset = monitor.getInitialClientOffset()
 
@@ -187,6 +193,10 @@ const spec = {
     const { x, y } = snapToRow(sourceOffset, componentClientReact, props.row, props.stepDuration)
 
 
+    t1 = performance.now();
+    console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
+
+
     // We do this check to avoid unnecessary renders of <DragItemPreview>
     if (x === prevX && y === prevY) {
       return;
@@ -198,12 +208,15 @@ const spec = {
     prevY = y
 
     // console.log({ x, y })
+    console.log('xxxxxxxx')
 
     props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
   }
 };
 
 function collect(connect, monitor) {
+
+  console.log('hx  monitor.isOver()')
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),

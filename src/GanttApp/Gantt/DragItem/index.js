@@ -23,7 +23,7 @@ class DragItem extends Component {
   }
 
   render() {
-    const { connectDragSource, isDragging, style } = this.props;
+    const { connectDragSource, enableEvents, isDragging, style } = this.props;
 
     // console.log('DragItem.render')
 
@@ -32,7 +32,7 @@ class DragItem extends Component {
     }
 
     return connectDragSource(
-      <div className={cx('drag-item')} style={style}>
+      <div className={cx('drag-item', enableEvents && 'with-event')} style={style}>
         🙂
       </div>
     );

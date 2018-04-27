@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import { DragLayer } from 'react-dnd'
-import { ItemTypes } from '../constants';
+import { ItemTypes } from '../constants'
 import DragItemPreview from '../DragItemPreview'
 import snapToGrid from '../snapToGrid'
 
@@ -41,12 +42,23 @@ class CustomDragLayer extends Component {
     }
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (_.get(this.props, 'dragItem.x') === _.get(nextProps, 'dragItem.x') && _.get(this.props, 'dragItem.y') === _.get(nextProps, 'dragItem.y')) {
+  //     console.log('false')
+  //     return false
+  //   }
+  //   console.log('true')
+  //   return true
+  // }
+
   render() {
     const { item, itemType, isDragging, dragItem } = this.props
 
     if (!isDragging) {
       return null
     }
+
+    console.log('CustomDragLayer', this.props)
 
     return (
       dragItem ||
