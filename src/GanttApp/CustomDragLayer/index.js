@@ -55,6 +55,7 @@ class CustomDragLayer extends Component {
     }
 
     console.log('CustomDragLayer.render', this.props)
+    window.PERFORMANCE.CustomDragLayer++
 
     return (
       dragItem ||

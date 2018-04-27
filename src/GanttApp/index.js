@@ -12,6 +12,33 @@ import TrashCan from './TrashCan';
 import { ItemTypes } from './constants';
 import './styles.css';
 
+
+window.PERFORMANCE = {
+  CustomDragLayer: 0,
+  DragItemPreview: 0,
+  Gantt: 0,
+  Row: 0,
+  RowHover: 0,
+}
+
+/*
+class HTML5Modifiers extends HTML5Backend {
+  handleTopDragEnter(e) {
+    super.handleTopDragEnter(e);
+    console.log('handleTopDragEnter')
+    this.altKeyPressed = e.ctrlKey || e.metaKey;
+  }
+  handleTopDragOver(e) {
+    super.handleTopDragOver(e);
+    this.altKeyPressed = e.ctrlKey || e.metaKey;
+  }
+}
+
+function createHTML5Backend(manager) {
+  return new HTML5Modifiers(manager);
+}
+*/
+
 /**
  * TODO
  * - Create decorator for components that receive 'renderDraggedItem'
@@ -106,4 +133,4 @@ class GanttApp extends Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(GanttApp)
+export default DragDropContext(HTML5Modifiers)(GanttApp)

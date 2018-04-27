@@ -51,6 +51,7 @@ const spec = {
    * The returned data will be accessible through monitor.getItem()
    */
   beginDrag(props, monitor, component) {
+    props.onBeginDrag();
     return props.item
   },
 

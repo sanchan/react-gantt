@@ -2,7 +2,7 @@ body {
   background: #252525;
   -webkit-overflow-scrolling: auto;
 }
-
+/**
 body * {
   pointer-events: none;
 }
@@ -14,3 +14,4 @@ body * {
 .row:first-child .drag-item:first-child {
   pointer-events: all;
 }
+//*/

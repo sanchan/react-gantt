@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as moment from 'moment';
 import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import List from 'react-virtualized/dist/commonjs/List';
 import Row from './Row';
 import CustomDragLayer from '../CustomDragLayer';
@@ -90,7 +89,11 @@ export default class Gantt extends Component {
     return event
   }
 
+  handleBeginDrag = () => {
+  }
+
   handleDrop = ({ item, target }) => {
+
     if (!target) {
       return;
     }
@@ -143,6 +146,7 @@ export default class Gantt extends Component {
         <Row
           stepDuration={stepDuration}
           row={row}
+          onBeginDrag={this.handleBeginDrag}
           onDrop={this.handleDrop}
           renderDraggedItem={this.handleRenderDraggedItem}
 
@@ -162,6 +166,7 @@ export default class Gantt extends Component {
     const { dragItem } = this.state;
 
     console.log('Gantt.render')
+    window.PERFORMANCE.Gantt++
 
     return (
       <div

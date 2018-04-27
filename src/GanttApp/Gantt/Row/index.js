@@ -43,6 +43,7 @@ class Row extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // return false
+    console.log('nextProps.itemType', nextProps.itemType)
     return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
   }
 
@@ -72,6 +73,7 @@ class Row extends Component {
       key={idx}
       item={item}
       enableEvents={this.props.row.data.items.length - 1 === idx}
+      onBeginDrag={this.props.onBeginDrag}
       onDrop={this.props.onDrop}
       style={this.stylesForItem(item)}
     />
@@ -83,14 +85,30 @@ class Row extends Component {
     return new Promise(resolve => resolve(<div>{_.map(row.data.items, this.renderItem)}</div>))
   }
 
+  handleMouseEnter = (e) => {
+    const { isOver, itemType } = this.props;
+    console.log('onDragEnter')
+
+    if(isOver && itemType) {
+      // console.log('onDragOver', e)
+      e.preventDefault();
+      e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
+
+    }
+
+  }
+
   render() {
     const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
     console.log('Row.render', row)
+    window.PERFORMANCE.Row++
+
     // { async () => await this.renderItems }
 
     return connectDropTarget(
-      <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
+      <div className={cx("row", itemType && !canDrop && 'cant-drop')} onDragEnter={this.handleMouseEnter}>
         {_.map(row.data.items, this.renderItem)}
       </div>
     );
@@ -140,6 +158,8 @@ const spec = {
 
   hover(props, monitor, component) {
     console.log('Row hover')
+    window.PERFORMANCE.RowHover++
+
     // return false;
     t0 = performance.now();
 

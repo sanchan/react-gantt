@@ -14,6 +14,7 @@ export default class DragItemPreview extends Component {
     const { x, y, children } = this.props;
 
     console.log('DragItemPreview.redern')
+    window.PERFORMANCE.DragItemPreview++
 
     return (
       <div className={cx('drag-item-preview')} style={{ top: y, left: x }}>
