@@ -15,6 +15,7 @@ const GANTT_WIDTH = 10000000000
  * TODO
  * - Create decorator for components that receive 'renderDraggedItem'
  * - Add preview for virtulized list
+ * - When dragging if a DragItem is <= 20px, set its z-index to 1 this way we can make it dropable
  */
 export default class Gantt extends Component {
   // NOTE Right now we are using the state (I'm too lazy to config redux :P), eventually we will move to redux
@@ -44,6 +45,7 @@ export default class Gantt extends Component {
   }
   constructor(props) {
     super(props)
+    // NOTE This improves a lot the performance. Try values like 10 to 50 (10 looks great)
     this.handleRenderDraggedItem = _.throttle(this.handleRenderDraggedItem, 10)
   }
 
