@@ -38,7 +38,7 @@ const spec = {
   hover(props, monitor, component) {
     const mousePosition = monitor.getClientOffset()
 
-    if (monitor.isOver({ shallow: true })) {
+    if (props.isOver) {
       props.renderDraggedItem(<DragItemPreview x={mousePosition.x} y={mousePosition.y}>😵</DragItemPreview>)
     }
   }
@@ -47,7 +47,7 @@ const spec = {
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
+    isOver: monitor.isOver({ shallow: true }),
     // canDrop: monitor.canDrop(),
     itemType: monitor.getItemType()
   };

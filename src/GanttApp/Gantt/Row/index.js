@@ -38,6 +38,12 @@ export default class Row extends Component {
 
   componentDidMount() {
     const { items } = this.props;
+    const d = _.debounce(() => {
+      this.setState({
+        items: this.renderItems()
+      })
+    }, 0)
+    d();
   }
 
 
@@ -83,7 +89,8 @@ export default class Row extends Component {
   renderItems = () => {
     const { row } = this.props;
 
-    return new Promise(resolve => resolve(<div>{_.map(row.data.items, this.renderItem)}</div>))
+    return _.map(row.data.items, this.renderItem)
+    // return new Promise(resolve => resolve(<div>{_.map(row.data.items, this.renderItem)}</div>))
   }
 
   render() {
@@ -97,7 +104,7 @@ export default class Row extends Component {
     return (
       <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
         <RowDropTarget {...this.props} />
-        {_.map(row.data.items, this.renderItem)}
+        {this.state.items}
       </div>
     );
   }

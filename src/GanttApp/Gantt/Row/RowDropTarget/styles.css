@@ -5,3 +5,8 @@
   right: 0;
   bottom: 0;
 }
+
+.drop-area-active {
+  /* This line here makes almost all the magic */
+  z-index: 1;
+}

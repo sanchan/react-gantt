@@ -42,9 +42,9 @@ export default class Gantt extends Component {
     centerPixels: 0, // NOTE Needed?
     xOffset: 0,
   }
-
   constructor(props) {
     super(props)
+    this.handleRenderDraggedItem = _.throttle(this.handleRenderDraggedItem, 10)
   }
 
   componentDidMount() {
@@ -126,12 +126,14 @@ export default class Gantt extends Component {
   }
 
   handleRenderDraggedItem = (dragItemComponent, dropData) => {
-    if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
-      this.setState({
-        dragItem: dragItemComponent,
-        dropItemData: dropData,
-      });
-    }
+    setTimeout(() => {
+      if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
+        this.setState({
+          dragItem: dragItemComponent,
+          dropItemData: dropData,
+        });
+      }
+    })
   }
 
   renderRow = ({ key, index, isScrolling, isVisible, style }) => {

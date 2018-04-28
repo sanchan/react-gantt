@@ -48,7 +48,7 @@ const spec = {
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
+    isOver: monitor.isOver({ shallow: true }),
     // canDrop: monitor.canDrop(),
     itemType: monitor.getItemType()
   };

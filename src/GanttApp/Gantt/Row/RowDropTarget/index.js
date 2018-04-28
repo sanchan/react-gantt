@@ -13,7 +13,7 @@ import styles from './styles.css';
 
 
 let t0, t1
-let debouncedRendering
+let throttledRendering
 
 class RowDropTarget extends Component {
   static propTypes = {
@@ -72,13 +72,14 @@ class RowDropTarget extends Component {
   render() {
     const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
+    // console.log('itemType', itemType)
     // console.log('Row.render', row)
     window.PERFORMANCE.Row++
 
     // { async () => await this.renderItems }
 
     return (
-      connectDropTarget(<div className={'drop-area'}></div>)
+      connectDropTarget(<div className={cx('drop-area', itemType && 'drop-area-active')}></div>)
     );
   }
 }
@@ -174,16 +175,17 @@ const spec = {
 
     // console.log({x,y})
 
-    // if (debouncedRendering) {
-    //   debouncedRendering.cancel()
+    // if (throttledRendering) {
+    //   throttledRendering.cancel()
     // }
 
-    // NOTE This is not actually debouncing, but creating an async call
-    debouncedRendering = _.debounce(() => {
-      props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
-    }, 200)
+    // throttledRendering = _.throttle(() => {
+    //   props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
+    // }, 50)
 
-    debouncedRendering()
+    props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
+
+    // throttledRendering()
   }
 };
 
@@ -191,7 +193,7 @@ function collect(connect, monitor) {
 
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver({ shallow: true }),
+    isOver: monitor.isOver({ shallow: false }),
     canDrop: monitor.canDrop(),
     itemType: monitor.getItemType()
   };

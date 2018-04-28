@@ -8,14 +8,6 @@
   width: 10000px;
 }
 
-.drop-area {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
 .is-over {
   background: rgb(94, 150, 255);
 }

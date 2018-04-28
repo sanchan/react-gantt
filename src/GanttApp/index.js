@@ -77,7 +77,7 @@ class GanttApp extends Component {
             id: t + 1,
             name: `User ${t + 1}`
           },
-          items: _.times(200, i => {
+          items: _.times(300, i => {
             start.add(15, 'minutes')
             end.add(15, 'minutes')
 
