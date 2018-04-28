@@ -16,8 +16,17 @@ export default class DragItemPreview extends Component {
     // console.log('DragItemPreview.redern')
     window.PERFORMANCE.DragItemPreview++
 
+    const transform = `translate(${x}px, ${y}px)`
+    const style =  {
+      transform,
+      WebkitTransform: transform,
+      backgroundColor: 'red'
+    }
+
+    const style2 = { top: y, left: x, backgroundColor: 'red' }
+
     return (
-      <div className={cx('drag-item-preview')} style={{ top: y, left: x }}>
+      <div className={cx('drag-item-preview')} style={style}>
         {children || "😮"}
       </div>
     );

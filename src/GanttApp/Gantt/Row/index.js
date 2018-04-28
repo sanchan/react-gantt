@@ -9,12 +9,13 @@ import DragItem from '../DragItem';
 import DragItemPreview from '../../DragItemPreview';
 // import AsyncChild from 'react-async-child';
 import AsyncChild from './AsyncChild';
+import RowDropTarget from './RowDropTarget';
 import styles from './styles.css';
 
 
 let t0, t1
 
-class Row extends Component {
+export default class Row extends Component {
   static propTypes = {
     row: PropTypes.object.isRequired,
     items: PropTypes.array.isRequired,
@@ -85,20 +86,6 @@ class Row extends Component {
     return new Promise(resolve => resolve(<div>{_.map(row.data.items, this.renderItem)}</div>))
   }
 
-  handleMouseEnter = (e) => {
-    const { isOver, itemType } = this.props;
-    // console.log('onDragEnter')
-
-    if(isOver && itemType) {
-      // console.log('onDragOver', e)
-      e.preventDefault();
-      e.stopPropagation();
-      e.nativeEvent.stopImmediatePropagation();
-
-    }
-
-  }
-
   render() {
     const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
@@ -109,116 +96,9 @@ class Row extends Component {
 
     return (
       <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
-        {connectDropTarget(<div className={'drop-area'}></div>)}
+        <RowDropTarget {...this.props} />
         {_.map(row.data.items, this.renderItem)}
       </div>
     );
   }
 }
-
-const snapToRow = (sourceOffset, componentClientReact, row, stepDuration) => {
-  const snappedX = Math.round(sourceOffset.x / row.data.step) * row.data.step
-
-  // This is were the potential new position of the item,
-  // we need next to 'snap' this value to the closest step
-  const currentValue = {
-    x: sourceOffset.x - componentClientReact.x,
-    y: sourceOffset.y - componentClientReact.y,
-  }
-
-  return {
-    // x: (Math.round(currentValue.x / stepDuration.asMilliseconds()) * stepDuration.asMilliseconds()) + componentClientReact.x,
-    // x: 0,
-    x: componentClientReact.x,
-    y: componentClientReact.y
-  }
-}
-
-const getDropData = (x, y, componentClientReact) => {
-  return {
-    start: x - componentClientReact.x,
-  }
-}
-
-let prevX, prevY
-const spec = {
-  canDrop(props) {
-    // Check permissions
-    return true;
-  },
-
-  /**
-   * This returns the object will be passed to DragSource.spec.endDrag through
-   * monitor.getDropResult()
-   */
-  drop(props, monitor, component) {
-    const { onDrop } = props
-
-    return props.row
-  },
-
-  hover(props, monitor, component) {
-    // console.log('Row hover')
-    window.PERFORMANCE.RowHover++
-
-    // return false;
-    t0 = performance.now();
-
-    // The exact mouse coordinates relative to the 'viewport' when the drag starts
-    const initialClientOffset = monitor.getInitialClientOffset()
-
-    // The initial coordinates (0,0) relatives to the 'viewport' of the DragSource
-    const initialSourceClientOffset = monitor.getInitialSourceClientOffset()
-
-    // The inner coordinates (x,y) relatives to the (0,0) of the DragSource
-    const sourceOriginOffset = {
-      x: initialClientOffset.x - initialSourceClientOffset.x,
-      y: initialClientOffset.y - initialSourceClientOffset.y
-    }
-
-    // The mouse coordinates (x,y) relatives to the 'viewport'
-    const clientOffset = monitor.getClientOffset()
-
-    // We need to offset negatively the clientOffset substracting the sourceOriginOffset
-    // so the top-left corner of the DragSource is snapped correctly
-    const sourceOffset = {
-      x: clientOffset.x - sourceOriginOffset.x,
-      y: clientOffset.y - sourceOriginOffset.y
-    }
-
-    const componentClientReact = ReactDOM.findDOMNode(component).getBoundingClientRect()
-
-    const { x, y } = snapToRow(sourceOffset, componentClientReact, props.row, props.stepDuration)
-
-
-    t1 = performance.now();
-    // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
-
-
-    // We do this check to avoid unnecessary renders of <DragItemPreview>
-    if (x === prevX && y === prevY) {
-      return;
-    }
-
-
-
-    prevX = x
-    prevY = y
-
-    // console.log({x,y})
-
-    props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
-  }
-};
-
-function collect(connect, monitor) {
-
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver({ shallow: true }),
-    canDrop: monitor.canDrop(),
-    itemType: monitor.getItemType()
-  };
-}
-
-export default DropTarget(ItemTypes.TASK, spec, collect)(Row);

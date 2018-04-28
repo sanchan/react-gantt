@@ -63,27 +63,37 @@ class GanttApp extends Component {
     })).isRequired
   };
 
-  state = {
-    rows: _.times(300, t => ({
-      id: t + 1,
-      data: {
-        user: {
-          id: t + 1,
-          name: `User ${t + 1}`
-        },
-        items: _.times(100, i => ({
-          id: i + 1,
-          data: {
-            start: moment(),
-            end: moment().add(2, 'hour')
-            // start: 32,
-            // end: 96
-          }
-        }))
-      }
-    })),
+  constructor(props) {
+    super(props)
 
-    stepDuration: moment.duration(15, 'minutes')
+    let start = moment()
+    let end = moment().add(2, 'hour')
+
+    this.state = {
+      rows: _.times(300, t => ({
+        id: t + 1,
+        data: {
+          user: {
+            id: t + 1,
+            name: `User ${t + 1}`
+          },
+          items: _.times(200, i => {
+            start.add(15, 'minutes')
+            end.add(15, 'minutes')
+
+            return ({
+              id: i + 1,
+              data: {
+                start,
+                end
+              }
+            })
+          })
+        }
+      })),
+
+      stepDuration: moment.duration(15, 'minutes')
+    }
   }
 
   handleDrop = ({ item, target }) => {
