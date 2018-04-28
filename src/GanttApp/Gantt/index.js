@@ -14,6 +14,7 @@ const GANTT_WIDTH = 10000000000
 /**
  * TODO
  * - Create decorator for components that receive 'renderDraggedItem'
+ * - Add preview for virtulized list
  */
 export default class Gantt extends Component {
   // NOTE Right now we are using the state (I'm too lazy to config redux :P), eventually we will move to redux
@@ -165,7 +166,7 @@ export default class Gantt extends Component {
     const { rows } = this.props;
     const { dragItem } = this.state;
 
-    console.log('Gantt.render')
+    // console.log('Gantt.render')
     window.PERFORMANCE.Gantt++
 
     return (
@@ -173,7 +174,7 @@ export default class Gantt extends Component {
         ref={ref => this.Gantt = ref}
         style={{
           width: '100%',
-          height: 800,
+          height: 1000,
           overflow: 'scroll',
           position: 'relative'
         }}
@@ -181,7 +182,7 @@ export default class Gantt extends Component {
       >
         <List
           ref={ref => this.List = ref}
-          height={800}
+          height={1000}
           overscanRowCount={10}
           // noRowsRenderer={this._noRowsRenderer}
           rowCount={rows.length}

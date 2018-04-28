@@ -71,7 +71,7 @@ class GanttApp extends Component {
           id: t + 1,
           name: `User ${t + 1}`
         },
-        items: _.times(80, i => ({
+        items: _.times(100, i => ({
           id: i + 1,
           data: {
             start: moment(),
@@ -123,7 +123,7 @@ class GanttApp extends Component {
   render() {
     const { rows, stepDuration, dragItem } = this.state;
 
-    console.log('GanttApp.render')
+    // console.log('GanttApp.render')
 
     return (
       <div>
@@ -133,4 +133,4 @@ class GanttApp extends Component {
   }
 }
 
-export default DragDropContext(HTML5Modifiers)(GanttApp)
+export default DragDropContext(HTML5Backend)(GanttApp)

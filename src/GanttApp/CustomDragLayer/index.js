@@ -54,7 +54,7 @@ class CustomDragLayer extends Component {
       return null
     }
 
-    console.log('CustomDragLayer.render', this.props)
+    // console.log('CustomDragLayer.render', this.props)
     window.PERFORMANCE.CustomDragLayer++
 
     return (

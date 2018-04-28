@@ -43,7 +43,7 @@ class Row extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // return false
-    console.log('nextProps.itemType', nextProps.itemType)
+    // console.log('nextProps.itemType', nextProps.itemType)
     return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
   }
 
@@ -87,7 +87,7 @@ class Row extends Component {
 
   handleMouseEnter = (e) => {
     const { isOver, itemType } = this.props;
-    console.log('onDragEnter')
+    // console.log('onDragEnter')
 
     if(isOver && itemType) {
       // console.log('onDragOver', e)
@@ -102,13 +102,14 @@ class Row extends Component {
   render() {
     const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
-    console.log('Row.render', row)
+    // console.log('Row.render', row)
     window.PERFORMANCE.Row++
 
     // { async () => await this.renderItems }
 
-    return connectDropTarget(
-      <div className={cx("row", itemType && !canDrop && 'cant-drop')} onDragEnter={this.handleMouseEnter}>
+    return (
+      <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
+        {connectDropTarget(<div className={'drop-area'}></div>)}
         {_.map(row.data.items, this.renderItem)}
       </div>
     );
@@ -157,7 +158,7 @@ const spec = {
   },
 
   hover(props, monitor, component) {
-    console.log('Row hover')
+    // console.log('Row hover')
     window.PERFORMANCE.RowHover++
 
     // return false;
@@ -204,7 +205,7 @@ const spec = {
     prevX = x
     prevY = y
 
-    console.log({x,y})
+    // console.log({x,y})
 
     props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
   }

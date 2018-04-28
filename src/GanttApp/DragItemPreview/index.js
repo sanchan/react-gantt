@@ -13,7 +13,7 @@ export default class DragItemPreview extends Component {
   render() {
     const { x, y, children } = this.props;
 
-    console.log('DragItemPreview.redern')
+    // console.log('DragItemPreview.redern')
     window.PERFORMANCE.DragItemPreview++
 
     return (
