@@ -174,9 +174,14 @@ const spec = {
 
     // console.log({x,y})
 
+    // if (debouncedRendering) {
+    //   debouncedRendering.cancel()
+    // }
+
+    // NOTE This is not actually debouncing, but creating an async call
     debouncedRendering = _.debounce(() => {
       props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
-    }, 100)
+    }, 200)
 
     debouncedRendering()
   }
