@@ -6,16 +6,11 @@
   height: 40px;
   position: absolute;
   top: 0;
-  pointer-events: none;
 }
 
+.drag-item.no-events,
 .drag-item * {
   pointer-events: none;
-}
-
-.drag-item.with-event,
-.drag-item * {
-  pointer-events: all;
 }
 
 .drag-item.dragging {

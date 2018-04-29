@@ -1,8 +1,7 @@
 .drag-item-preview {
   cursor: move;
-  pointer-events: none;
   display: inline-block;
-  background: #ccc;
+  background: green;
   min-width: 80px;
   height: 40px;
   position: absolute;

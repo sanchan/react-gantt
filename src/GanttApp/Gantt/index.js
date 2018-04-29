@@ -93,9 +93,17 @@ export default class Gantt extends Component {
   }
 
   handleBeginDrag = () => {
+    // this.setState({
+    //   isDragging: true
+    // })
   }
 
   handleDrop = ({ item, target }) => {
+    console.log('handleDrop')
+
+    // this.setState({
+    //   isDragging: false
+    // })
 
     if (!target) {
       return;
@@ -149,11 +157,11 @@ export default class Gantt extends Component {
     return (
       <div key={index} style={{ ...style, width: GANTT_WIDTH }}>
         <Row
-          stepDuration={stepDuration}
           row={row}
           onBeginDrag={this.handleBeginDrag}
           onDrop={this.handleDrop}
           renderDraggedItem={this.handleRenderDraggedItem}
+          stepDuration={stepDuration}
 
           centerPixels={centerPixels}
           centerValue={centerValue}
@@ -170,7 +178,7 @@ export default class Gantt extends Component {
     const { rows } = this.props;
     const { dragItem } = this.state;
 
-    // console.log('Gantt.render')
+    console.log('Gantt.render', dragItem)
     window.PERFORMANCE.Gantt++
 
     return (

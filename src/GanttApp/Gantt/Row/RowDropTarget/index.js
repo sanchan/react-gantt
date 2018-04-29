@@ -43,9 +43,10 @@ class RowDropTarget extends Component {
 
 
   shouldComponentUpdate(nextProps, nextState) {
-    // return false
+    return true
     // console.log('nextProps.itemType', nextProps.itemType)
-    return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+    return nextProps.itemType !== this.props.itemType
+    // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
   }
 
   itemWidth = (item) => {
@@ -72,14 +73,14 @@ class RowDropTarget extends Component {
   render() {
     const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
-    // console.log('itemType', itemType)
+    console.log(`itemType ${row.id}`, itemType)
     // console.log('Row.render', row)
     window.PERFORMANCE.Row++
 
     // { async () => await this.renderItems }
 
     return (
-      connectDropTarget(<div className={cx('drop-area', itemType && 'drop-area-active')}></div>)
+      connectDropTarget(<div className={cx('drop-area', !itemType && 'drop-area-inactive')}></div>)
     );
   }
 }
@@ -130,7 +131,6 @@ const spec = {
     window.PERFORMANCE.RowHover++
 
     // return false;
-    t0 = performance.now();
 
     // The exact mouse coordinates relative to the 'viewport' when the drag starts
     const initialClientOffset = monitor.getInitialClientOffset()
@@ -158,15 +158,15 @@ const spec = {
 
     const { x, y } = snapToRow(sourceOffset, componentClientReact, props.row, props.stepDuration)
 
-
-    t1 = performance.now();
+    // t0 = performance.now();
+    // t1 = performance.now();
     // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
 
 
     // We do this check to avoid unnecessary renders of <DragItemPreview>
-    if (x === prevX && y === prevY) {
-      return;
-    }
+    // if (x === prevX && y === prevY) {
+    //   return;
+    // }
 
 
 
@@ -182,6 +182,8 @@ const spec = {
     // throttledRendering = _.throttle(() => {
     //   props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
     // }, 50)
+
+    console.log('props.renderDraggedItem')
 
     props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
 

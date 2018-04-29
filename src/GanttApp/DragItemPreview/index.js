@@ -20,14 +20,13 @@ export default class DragItemPreview extends Component {
     const style =  {
       transform,
       WebkitTransform: transform,
-      backgroundColor: 'red'
+      // backgroundColor: 'blue'
     }
 
-    const style2 = { top: y, left: x, backgroundColor: 'red' }
 
     return (
       <div className={cx('drag-item-preview')} style={style}>
-        {children || "😮"}
+        {children || "Dragging 😮"}
       </div>
     );
   }

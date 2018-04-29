@@ -33,7 +33,6 @@ class CustomDragLayer extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // return false
     return nextProps.dragItem ? (this.props.dragItem.props.x !== nextProps.dragItem.props.x) || (this.props.dragItem.props.y !== nextProps.dragItem.props.y) : false
   }
 

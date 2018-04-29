@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { ItemTypes } from '../../constants';
 import { DropTarget } from 'react-dnd';
 import DragItem from '../DragItem';
-import DragItemPreview from '../../DragItemPreview';
+import { DragItem as ItemPreview } from '../DragItem';
 // import AsyncChild from 'react-async-child';
 import AsyncChild from './AsyncChild';
 import RowDropTarget from './RowDropTarget';
@@ -32,27 +32,26 @@ export default class Row extends Component {
     centerValue: PropTypes.number.isRequired,
   };
 
+  _item_offset_TEST = -80
+
   state = {
-    children: []
+    items: []
   }
 
   componentDidMount() {
     const { items } = this.props;
-    const d = _.debounce(() => {
+    setTimeout(() => {
       this.setState({
         items: this.renderItems()
       })
-    }, 0)
-    d();
+    })
   }
 
 
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // return false
-    // console.log('nextProps.itemType', nextProps.itemType)
-    return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
+  // }
 
   itemWidth = (item) => {
     const { stepDuration } = this.props
@@ -67,10 +66,11 @@ export default class Row extends Component {
    * - Row.end: The row's end value/timestamp.
    */
   stylesForItem = (item) => {
-    const { xOffset } = this.props
+    // NOTE THIS IS FOR TEST ONLY
+    this._item_offset_TEST += 80
 
     return {
-      left: 0 + xOffset,
+      left: this._item_offset_TEST,
       width: this.itemWidth(item)
     }
   }
@@ -79,7 +79,8 @@ export default class Row extends Component {
     <DragItem
       key={idx}
       item={item}
-      enableEvents={this.props.row.data.items.length - 1 === idx}
+      disableEvents={this.props.isDragging}
+      renderDraggedItem={this.props.renderDraggedItem}
       onBeginDrag={this.props.onBeginDrag}
       onDrop={this.props.onDrop}
       style={this.stylesForItem(item)}
@@ -93,8 +94,29 @@ export default class Row extends Component {
     // return new Promise(resolve => resolve(<div>{_.map(row.data.items, this.renderItem)}</div>))
   }
 
+  renderPreviewItem = (item, idx) => (
+    <ItemPreview
+      key={idx}
+      item={item}
+      disableEvents={this.props.isDragging}
+      onBeginDrag={this.props.onBeginDrag}
+      onDrop={this.props.onDrop}
+      style={this.stylesForItem(item)}
+      isPreview={true}
+    />
+  )
+
+  renderPreviewItems = () => {
+    const { row } = this.props;
+
+    const items = _.map(row.data.items, this.renderPreviewItem)
+    this._item_offset_TEST = -80
+
+    return items
+  }
+
   render() {
-    const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
+    const { row, width, children } = this.props;
 
     // console.log('Row.render', row)
     window.PERFORMANCE.Row++
@@ -102,9 +124,14 @@ export default class Row extends Component {
     // { async () => await this.renderItems }
 
     return (
-      <div className={cx("row", itemType && !canDrop && 'cant-drop')}>
+      <div className={cx("row")}>
         <RowDropTarget {...this.props} />
-        {this.state.items}
+        {this.renderItems()}
+        {/*this.state.items.length ?
+        this.state.items
+        :
+        this.renderPreviewItems()
+        */}
       </div>
     );
   }
