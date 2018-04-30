@@ -20,10 +20,6 @@ export class DragItem extends Component {
 		})
   }
 
-  componentWillUnmount() {
-    console.log('componentWillUnmount')
-  }
-
   // shouldComponentUpdate(nextProps, nextState) {
   //   // return false
   //   // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
@@ -31,8 +27,6 @@ export class DragItem extends Component {
 
   render() {
     const { connectDragSource, isDragging, isPreview, disableEvents, style } = this.props;
-
-    console.log('DragItem.render', isDragging)
 
     if (isDragging) {
       return null;
@@ -61,7 +55,7 @@ const spec = {
    */
   beginDrag(props, monitor, component) {
     props.onBeginDrag();
-    props.renderDraggedItem(<div style={{pointerEvents: 'none'}}></div>)
+    // props.renderDraggedItem(<div style={{pointerEvents: 'none'}}></div>)
     return props.item
   },
 
@@ -72,8 +66,6 @@ const spec = {
     const item = monitor.getItem()
     // The data returned by DropTarget.spec.drop()
     const target = monitor.getDropResult()
-
-    console.log('endDrag')
 
     onDrop({ item, target })
   }

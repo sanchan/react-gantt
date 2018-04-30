@@ -93,18 +93,9 @@ export default class Gantt extends Component {
   }
 
   handleBeginDrag = () => {
-    // this.setState({
-    //   isDragging: true
-    // })
   }
 
   handleDrop = ({ item, target }) => {
-    console.log('handleDrop')
-
-    // this.setState({
-    //   isDragging: false
-    // })
-
     if (!target) {
       return;
     }
@@ -136,6 +127,7 @@ export default class Gantt extends Component {
   }
 
   handleRenderDraggedItem = (dragItemComponent, dropData) => {
+    // NOTE Do we need this timeout here?
     setTimeout(() => {
       if (!_.isEqual(dragItemComponent, this.state.dragItem)) {
         this.setState({
@@ -178,7 +170,7 @@ export default class Gantt extends Component {
     const { rows } = this.props;
     const { dragItem } = this.state;
 
-    console.log('Gantt.render', dragItem)
+    // console.log('Gantt.render', dragItem)
     window.PERFORMANCE.Gantt++
 
     return (

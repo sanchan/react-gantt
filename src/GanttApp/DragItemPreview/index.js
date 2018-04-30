@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import cx from 'classnames';
 import { ItemTypes } from '../constants';
 // import { DragSource } from 'react-dnd';

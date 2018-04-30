@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -118,7 +118,7 @@ export default class Row extends Component {
   render() {
     const { row, width, children } = this.props;
 
-    // console.log('Row.render', row)
+    // console.log('Row.render')
     window.PERFORMANCE.Row++
 
     // { async () => await this.renderItems }
@@ -126,12 +126,12 @@ export default class Row extends Component {
     return (
       <div className={cx("row")}>
         <RowDropTarget {...this.props} />
-        {this.renderItems()}
-        {/*this.state.items.length ?
+        {/*this.renderItems()*/}
+        {this.state.items.length ?
         this.state.items
         :
         this.renderPreviewItems()
-        */}
+        }
       </div>
     );
   }

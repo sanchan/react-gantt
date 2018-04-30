@@ -70,14 +70,14 @@ class GanttApp extends Component {
     let end = moment().add(2, 'hour')
 
     this.state = {
-      rows: _.times(205, t => ({
+      rows: _.times(100, t => ({
         id: t + 1,
         data: {
           user: {
             id: t + 1,
             name: `User ${t + 1}`
           },
-          items: _.times(10, i => {
+          items: _.times(120, i => {
             start.add(15, 'minutes')
             end.add(15, 'minutes')
 

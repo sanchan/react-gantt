@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -13,7 +13,6 @@ import styles from './styles.css';
 
 
 let t0, t1
-let throttledRendering
 
 class RowDropTarget extends Component {
   static propTypes = {
@@ -40,12 +39,32 @@ class RowDropTarget extends Component {
     const { items } = this.props;
   }
 
+  componentWillReceiveProps(nextProps) {
+    /**
+     * NOTE
+     * For some reason I need to delay the isDragging here bc if I don't do it when I try to
+     * drag, it instantly emits a drop event, so it's not solved checking this.props.itemType
+     * to set the 'drop-area-inactive' class
+     */
+    if (nextProps.itemType && !this.props.itemType) {
+      setTimeout(() => {
+        this.setState({
+          isDragging: true
+        })
+      }, 50)
+    } else if (this.props.itemType && !nextProps.itemType) {
+      this.setState({
+        isDragging: false
+      })
+    }
+  }
+
 
 
   shouldComponentUpdate(nextProps, nextState) {
-    return true
+    // return true
     // console.log('nextProps.itemType', nextProps.itemType)
-    return nextProps.itemType !== this.props.itemType
+    return nextProps.itemType !== this.props.itemType || nextState.isDragging !== this.state.isDragging
     // return nextProps.itemType ? this.props.isOver !== nextProps.isOver : true
   }
 
@@ -73,14 +92,14 @@ class RowDropTarget extends Component {
   render() {
     const { row, connectDropTarget, isOver, canDrop, itemType, width, children } = this.props;
 
-    console.log(`itemType ${row.id}`, itemType)
+    // console.log(`itemType ${row.id}`, itemType)
     // console.log('Row.render', row)
     window.PERFORMANCE.Row++
 
     // { async () => await this.renderItems }
 
     return (
-      connectDropTarget(<div className={cx('drop-area', !itemType && 'drop-area-inactive')}></div>)
+      connectDropTarget(<div className={cx('drop-area', !this.state.isDragging && 'drop-area-inactive')}></div>)
     );
   }
 }
@@ -182,8 +201,6 @@ const spec = {
     // throttledRendering = _.throttle(() => {
     //   props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
     // }, 50)
-
-    console.log('props.renderDraggedItem')
 
     props.renderDraggedItem(<DragItemPreview x={x} y={y}>🤩</DragItemPreview>, getDropData(x, y, componentClientReact))
 
